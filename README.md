@@ -1,15 +1,64 @@
 # CMS Roles Permissions
 
+## Table of Contents
 
-# Guest Routes
+- [Guest Routes / Register](#register)
+- [Guest Routes / Login](#login)
+- [Auth Routes / Dashboard / Index](#index)
+- [Auth Routes / Dashboard / Logout](#logout)
+- [Auth Routes / Categories / Fetch all categories](#fetch-all-categories)
+- [Auth Routes / Categories / Fetch single category](#fetch-single-category)
+- [Auth Routes / Categories / Store a new category](#store-a-new-category)
+- [Auth Routes / Categories / Update a category](#update-a-category)
+- [Auth Routes / Categories / Delete a category](#delete-a-category)
+- [Auth Routes / Tags / Fetch all tags](#fetch-all-tags)
+- [Auth Routes / Tags / Fetch single tag](#fetch-single-tag)
+- [Auth Routes / Tags / Store a new tag](#store-a-new-tag)
+- [Auth Routes / Tags / Update a tag](#update-a-tag)
+- [Auth Routes / Tags / Delete a tag](#delete-a-tag)
+- [Auth Routes / Posts / Fetch all posts](#fetch-all-posts)
+- [Auth Routes / Posts / Fetch single post](#fetch-single-post)
+- [Auth Routes / Posts / Store a new post](#store-a-new-post)
+- [Auth Routes / Posts / Update a post](#update-a-post)
+- [Auth Routes / Posts / Delete a post](#delete-a-post)
+- [Auth Routes / Roles / Fetch all roles](#fetch-all-roles)
+- [Auth Routes / Roles / Fetch single role](#fetch-single-role)
+- [Auth Routes / Roles / Store a new role](#store-a-new-role)
+- [Auth Routes / Roles / Update a role](#update-a-role)
+- [Auth Routes / Roles / Delete a role](#delete-a-role)
+- [Auth Routes / Users / Fetch all users](#fetch-all-users)
+- [Auth Routes / Users / Fetch single user](#fetch-single-user)
+- [Auth Routes / Users / Store a new user](#store-a-new-user)
+- [Auth Routes / Users / Update a user](#update-a-user)
+- [Auth Routes / Users / Delete a user](#delete-a-user)
+- [Auth Routes / Comments / Fetch all comments](#fetch-all-comments)
+- [Auth Routes / Comments / Change comment status](#change-comment-status)
+- [Auth Routes / Comments / Delete a comment](#delete-a-comment)
+- [Auth Routes / Notes / Fetch all notes](#fetch-all-notes)
+- [Auth Routes / Notes / Store a new note](#store-a-new-note)
+- [Auth Routes / Notes / Delete a note](#delete-a-note)
+- [Auth Routes / Profile / Profile details](#profile-details)
+- [Auth Routes / Profile / Update profile](#update-profile)
+- [Auth Routes / Profile / Change password](#change-password)
+- [Front Routes / Home / Index](#index)
+- [Front Routes / Blog / Index](#index)
+- [Front Routes / Blog / Post details](#post-details)
+- [Front Routes / Blog / Fetch posts by category](#fetch-posts-by-category)
+- [Front Routes / Blog / Fetch posts by tag](#fetch-posts-by-tag)
+- [Front Routes / Blog / Fetch posts by author](#fetch-posts-by-author)
+- [Front Routes / Blog / Fetch related posts](#fetch-related-posts)
+- [Front Routes / Comments / Fetch related comments](#fetch-related-comments)
+- [Front Routes / Comments / Store a new comment](#store-a-new-comment)
+
+---
 
 
-### Register
+# Register
 
-**Method:** `POST`
+**Section:** Guest Routes
 
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/register`
-
 
 ## Overview
 
@@ -127,13 +176,61 @@ It is returned when the user has already logged in. the API returns a `403 Forbi
 
 - Consider implementing rate limiting for this endpoint to prevent abuse.
 
+## Example Responses
 
-### Login
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "User registered successfully.",
+    "data": {
+        "name": "Rayan",
+        "username": "rayan",
+        "email": "rayan@mail.to",
+        "role": "author"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 2 more errors)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "username": [
+            "The username field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ],
+        "password": [
+            "The password field is required."
+        ]
+    }
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You are already logged in."
+}
+```
+
+
+# Login
+
+**Section:** Guest Routes
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/login`
-
 
 ## Overview
 
@@ -261,19 +358,67 @@ It is returned when the user has already logged in. the API returns a `403 Forbi
 
 - The access token is automatically saved to the collection variable `{{token}}` when login is successful (HTTP 200 response)
 
+## Example Responses
 
-# Auth Routes
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Login successfully.",
+    "data": {
+        "token": "1|ncBa8ai5mRuUKL4ZHkt1sV1DeIwV0GCDwyK1wqZuc3f54e4f",
+        "user": {
+            "name": "Admin",
+            "username": "admin",
+            "email": "admin@mail.to",
+            "role": "admin"
+        }
+    }
+}
+```
+
+### Unauthorized 401 (`403`)
+
+```json
+{
+    "success": false,
+    "errorMessage": "Invalid credentials."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The email field is required. (and 1 more error)",
+    "errors": {
+        "email": [
+            "The email field is required."
+        ],
+        "password": [
+            "The password field is required."
+        ]
+    }
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You are already logged-in."
+}
+```
 
 
-## Dashboard
+# Index
 
+**Section:** Auth Routes → Dashboard
 
-#### Index
-
-**Method:** `GET`
-
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/dashboard`
-
 
 ## Overview
 
@@ -418,13 +563,70 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Logout
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "latestComment": {
+            "id": 3,
+            "name": "Suariz",
+            "email": "suariz@mail.to",
+            "body": "This is just comment for testing.",
+            "status": "approved",
+            "post": {
+                "id": 3,
+                "title": "Sample blog post 3"
+            },
+            "createdAt": "2024-02-06T17:21:24.000000Z",
+            "updatedAt": "2024-02-06T17:21:36.000000Z"
+        },
+        "latestPost": {
+            "id": 3,
+            "title": "Sample Blog Post 3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "status": "published",
+            "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHDzSa.png",
+            "author": {
+                "id": 1,
+                "name": "Admin",
+                "username": "admin",
+                "email": "admin@mail.to",
+                "role": "admin",
+                "status": "active",
+                "createdAt": "2024-02-06T13:50:03.000000Z",
+                "updatedAt": "2024-02-06T13:50:03.000000Z"
+            },
+            "category": {
+                "id": 3,
+                "name": "IT Support",
+                "showInHome": "no"
+            },
+            "tags": [
+                {
+                    "id": 3,
+                    "name": "Linux",
+                    "showInHome": "no"
+                }
+            ],
+            "createdAt": "2024-02-06T17:21:24.000000Z",
+            "updatedAt": "2024-02-06T17:21:36.000000Z"
+        }
+    }
+}
+```
 
+
+# Logout
+
+**Section:** Auth Routes → Dashboard
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/logout`
-
 
 ## Overview
 
@@ -490,16 +692,24 @@ This request includes an automated script that runs after receiving the response
     
 - The token is automatically cleared by the post-response script, so manual cleanup is not required
 
+## Example Responses
 
-## Categories
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Logout successfully."
+}
+```
 
 
-#### Fetch all categories
+# Fetch all categories
 
-**Method:** `GET`
+**Section:** Auth Routes → Categories
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/categories`
-
 
 ## Overview
 
@@ -593,13 +803,50 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
     
 - The response will be an array of categories, even if there are no categories available, in which case the array will be empty.
 
+## Example Responses
 
-#### Fetch single category
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "IT Support",
+            "showInHome": "no"
+        },
+        {
+            "id": 2,
+            "name": "Software Testing",
+            "showInHome": "no"
+        },
+        {
+            "id": 1,
+            "name": "Network Engineering",
+            "showInHome": "no"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Fetch single category
+
+**Section:** Auth Routes → Categories
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/categories/:category`
-
 
 ## Overview
 
@@ -680,13 +927,37 @@ When the specified category ID does not exist, the API returns a `404 Not Found`
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Store a new category
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "name": "IT Support",
+        "slug": "it-support",
+        "showInHome": "no"
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Store a new category
+
+**Section:** Auth Routes → Categories
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/categories`
-
 
 ## Overview
 
@@ -780,13 +1051,45 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update a category
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "Category created successfully.",
+    "data": {
+        "id": 1,
+        "name": "IT Support",
+        "showInHome": "no"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 1 more error)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ]
+    }
+}
+```
+
+
+# Update a category
+
+**Section:** Auth Routes → Categories
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/categories/:category`
-
 
 ## Overview
 
@@ -907,13 +1210,54 @@ When the specified category ID does not exist, the API returns a `404 Not Found`
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a category
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Category updated successfully.",
+    "data": {
+        "name": "IT Support",
+        "slug": "it-support",
+        "showInHome": "yes"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 1 more error)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a category
+
+**Section:** Auth Routes → Categories
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/categories/:category`
-
 
 ## Overview
 
@@ -1001,16 +1345,33 @@ Before deleting a category, consider the following:
 
 💡 **Tip:** Before deleting a category in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Tags
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Category deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Fetch all tags
+# Fetch all tags
 
-**Method:** `GET`
+**Section:** Auth Routes → Tags
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/tags`
-
 
 ## Overview
 
@@ -1104,13 +1465,50 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
     
 - The response will be an array of tags, even if there are no tags available, in which case the array will be empty.
 
+## Example Responses
 
-#### Fetch single tag
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "Linux",
+            "showInHome": "no"
+        },
+        {
+            "id": 2,
+            "name": "Blockchain",
+            "showInHome": "no"
+        },
+        {
+            "id": 1,
+            "name": "DevOps",
+            "showInHome": "no"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Fetch single tag
+
+**Section:** Auth Routes → Tags
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/tags/:tag`
-
 
 ## Overview
 
@@ -1191,13 +1589,37 @@ When the specified tag ID does not exist, the API returns a `404 Not Found` stat
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Store a new tag
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "name": "Linux",
+        "slug": "linux",
+        "showInHome": "no"
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Store a new tag
+
+**Section:** Auth Routes → Tags
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/tags`
-
 
 ## Overview
 
@@ -1291,13 +1713,45 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update a tag
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "Tag created successfully.",
+    "data": {
+        "name": "Linux",
+        "slug": "linux",
+        "showInHome": "no"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 1 more error)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ]
+    }
+}
+```
+
+
+# Update a tag
+
+**Section:** Auth Routes → Tags
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/tags/:tag`
-
 
 ## Overview
 
@@ -1418,13 +1872,54 @@ When the specified tag ID does not exist, the API returns a `404 Not Found` stat
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a tag
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Tag updated successfully.",
+    "data": {
+        "name": "Linux",
+        "slug": "linux",
+        "showInHome": "yes"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 1 more error)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a tag
+
+**Section:** Auth Routes → Tags
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/tags/:tag`
-
 
 ## Overview
 
@@ -1512,16 +2007,33 @@ Before deleting a tag, consider the following:
 
 💡 **Tip:** Before deleting a tag in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Posts
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Tag deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Fetch all posts
+# Fetch all posts
 
-**Method:** `GET`
+**Section:** Auth Routes → Posts
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/posts`
-
 
 ## Overview
 
@@ -1698,13 +2210,113 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
     
 - The response will be an array of posts, even if there are no posts available, in which case the array will be empty.
 
+## Example Responses
 
-#### Fetch single post
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "title": "Sample Blog Post 3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHDzSa.png",
+            "featured": "no",
+            "status": "published",
+            "category": {
+                "id": 3,
+                "name": "IT Support"
+            },
+            "tags": [
+                {
+                    "id": 3,
+                    "name": "Linux"
+                }
+            ],
+            "author": {
+                "id": 1,
+                "name": "Admin",
+                "email": "admin@mail.to"
+            },
+            "createdAt": "2024-02-06T17:21:24.000000Z",
+            "updatedAt": "2024-02-06T17:21:36.000000Z"
+        },
+        {
+            "id": 2,
+            "title": "Sample Blog Post 2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHDzAq.png",
+            "featured": "no",
+            "status": "published",
+            "category": {
+                "id": 2,
+                "name": "Software Testing"
+            },
+            "tags": [
+                {
+                    "id": 3,
+                    "name": "Linux"
+                }
+            ],
+            "author": {
+                "id": 1,
+                "name": "Admin",
+                "email": "admin@mail.to"
+            },
+            "createdAt": "2024-02-06T17:31:24.000000Z",
+            "updatedAt": "2024-02-06T17:31:36.000000Z"
+        },
+        {
+            "id": 1,
+            "title": "Sample Blog Post 1",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHGzAq.png",
+            "featured": "no",
+            "status": "published",
+            "category": {
+                "id": 1,
+                "name": "Network Engineering"
+            },
+            "tags": [
+                {
+                    "id": 3,
+                    "name": "Linux"
+                }
+            ],
+            "author": {
+                "id": 1,
+                "name": "Admin",
+                "email": "admin@mail.to"
+            },
+            "createdAt": "2024-02-06T17:41:24.000000Z",
+            "updatedAt": "2024-02-06T17:41:36.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Fetch single post
+
+**Section:** Auth Routes → Posts
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/posts/:post`
-
 
 ## Overview
 
@@ -1827,13 +2439,58 @@ When the specified post ID does not exist, the API returns a `404 Not Found` sta
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Store a new post
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "title": "Sample Blog Post 1",
+        "slug": "sample-blog-post-1",
+        "intro": "sample blog post intro.",
+        "content": "sample blog post content.",
+        "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHU4uN.png",
+        "featured": "no",
+        "status": "published",
+        "category": {
+            "id": 1,
+            "name": "IT Support"
+        },
+        "tags": [
+            {
+                "id": 1,
+                "name": "Linux"
+            }
+        ],
+        "author": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@mail.to"
+        },
+        "createdAt": "2024-02-06T17:21:24.000000Z",
+        "updatedAt": "2024-02-06T17:21:36.000000Z"
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Store a new post
+
+**Section:** Auth Routes → Posts
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/posts`
-
 
 ## Overview
 
@@ -1990,13 +2647,81 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update a post
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "Post created successfully.",
+    "data": {
+        "id": 1,
+        "title": "Sample blog post 1",
+        "intro": "sample blog post intro.",
+        "content": "sample blog post content.",
+        "image": "http://127.0.0.1:8000/storage/posts/bxHyF8HwTYpuG5pis0p7i0NJqoRuxlbDqTCGWINh.png",
+        "featured": "no",
+        "status": "published",
+        "category": {
+            "id": 1,
+            "name": "IT Support"
+        },
+        "tags": [
+            {
+                "id": 1,
+                "name": "Linux"
+            }
+        ],
+        "author": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@mail.to"
+        },
+        "createdAt": "2024-02-06T17:31:41.000000Z",
+        "updatedAt": "2024-02-06T17:31:41.000000Z"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The title field is required. (and 6 more errors)",
+    "errors": {
+        "title": [
+            "The title field is required."
+        ],
+        "intro": [
+            "The intro field is required."
+        ],
+        "content": [
+            "The content field is required."
+        ],
+        "tags": [
+            "You must select at least one tag."
+        ],
+        "category_id": [
+            "The category id field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ],
+        "image": [
+            "The image field is required."
+        ]
+    }
+}
+```
+
+
+# Update a post
+
+**Section:** Auth Routes → Posts
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/posts/:post`
-
 
 ## Overview
 
@@ -2176,13 +2901,87 @@ When the specified post ID does not exist, the API returns a `404 Not Found` sta
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a post
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Post updated successfully.",
+    "data": {
+        "id": 1,
+        "title": "Sample Blog Post 1 Up",
+        "intro": "sample blog post intro.",
+        "content": "sample blog post content.",
+        "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHU4uN.png",
+        "featured": "no",
+        "status": "published",
+        "category": {
+            "id": 1,
+            "name": "IT Support"
+        },
+        "tags": [
+            {
+                "id": 1,
+                "name": "Linux"
+            }
+        ],
+        "author": {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@mail.to"
+        },
+        "createdAt": "2024-02-06T17:21:24.000000Z",
+        "updatedAt": "2024-02-06T17:35:36.000000Z"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The title field is required. (and 5 more errors)",
+    "errors": {
+        "title": [
+            "The title field is required."
+        ],
+        "intro": [
+            "The intro field is required."
+        ],
+        "content": [
+            "The content field is required."
+        ],
+        "tags": [
+            "You must select at least one tag."
+        ],
+        "category_id": [
+            "The category id field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a post
+
+**Section:** Auth Routes → Posts
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/posts/:post`
-
 
 ## Overview
 
@@ -2266,16 +3065,33 @@ Before deleting a post, consider the following:
 
 💡 **Tip:** Before deleting a post in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Roles
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Post deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Fetch all roles
+# Fetch all roles
 
-**Method:** `GET`
+**Section:** Auth Routes → Roles
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/roles`
-
 
 ## Overview
 
@@ -2384,13 +3200,59 @@ This response is returned when the authenticated user does not have sufficient p
     
 - The response will be an array of roles, even if there are no roles available, in which case the array will be empty.
 
+## Example Responses
 
-#### Fetch single role
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "author",
+            "guardName": "sanctum"
+        },
+        {
+            "id": 2,
+            "name": "editor",
+            "guardName": "sanctum"
+        },
+        {
+            "id": 1,
+            "name": "admin",
+            "guardName": "sanctum"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+
+# Fetch single role
+
+**Section:** Auth Routes → Roles
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/roles/:role`
-
 
 ## Overview
 
@@ -2506,13 +3368,67 @@ This response is returned when the authenticated user does not have sufficient p
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Store a new role
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "name": "admin",
+        "guardName": "sanctum",
+        "permissions": [
+            "create_category",
+            "update_category",
+            "delete_category",
+            "create_tag",
+            "update_tag",
+            "delete_tag",
+            "create_post",
+            "update_post",
+            "delete_post",
+            "create_comment",
+            "update_comment",
+            "delete_comment",
+            "view_roles",
+            "create_role",
+            "update_role",
+            "delete_role",
+            "view_users",
+            "create_user",
+            "update_user",
+            "delete_user"
+        ]
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+
+# Store a new role
+
+**Section:** Auth Routes → Roles
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/roles`
-
 
 ## Overview
 
@@ -2623,13 +3539,58 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update a role
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "Role created successfully.",
+    "data": {
+        "name": "Random Role",
+        "guardName": "sanctum",
+        "permissions": [
+            "create_post",
+            "update_post",
+            "delete_post"
+        ]
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The permissions field is required. (and 1 more error)",
+    "errors": {
+        "permissions": [
+            "The permissions field is required."
+        ],
+        "name": [
+            "The name field is required."
+        ]
+    }
+}
+```
+
+
+# Update a role
+
+**Section:** Auth Routes → Roles
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/roles/:role`
-
 
 ## Overview
 
@@ -2767,13 +3728,67 @@ When the specified role ID does not exist, the API returns a `404 Not Found` sta
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a role
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Role updated successfully.",
+    "data": {
+        "name": "Random Role",
+        "guardName": "sanctum",
+        "permissions": [
+            "create_category",
+            "update_category",
+            "delete_category"
+        ]
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The permissions field is required. (and 1 more error)",
+    "errors": {
+        "permissions": [
+            "The permissions field is required."
+        ],
+        "name": [
+            "The name field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a role
+
+**Section:** Auth Routes → Roles
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/roles/:role`
-
 
 ## Overview
 
@@ -2875,16 +3890,42 @@ Before deleting a role, consider the following:
 
 💡 **Tip:** Before deleting a role in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Users
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Role deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
 
 
-#### Fetch all users
+# Fetch all users
 
-**Method:** `GET`
+**Section:** Auth Routes → Users
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/users`
-
 
 ## Overview
 
@@ -3015,13 +4056,74 @@ This response is returned when the authenticated user does not have sufficient p
     
 - The response will be an array of users, even if there are no users available, in which case the array will be empty.
 
+## Example Responses
 
-#### Fetch single user
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "Rayan",
+            "username": "rayan",
+            "email": "rayan@mail.to",
+            "role": "author",
+            "status": "active",
+            "createdAt": "2024-02-06T13:30:55.000000Z",
+            "updatedAt": "2024-02-06T13:30:55.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Adam",
+            "username": "adam",
+            "email": "adam@mail.to",
+            "role": "author",
+            "status": "active",
+            "createdAt": "2024-02-06T13:40:55.000000Z",
+            "updatedAt": "2024-02-06T13:40:55.000000Z"
+        },
+        {
+            "id": 1,
+            "name": "David",
+            "username": "david",
+            "email": "david@mail.to",
+            "role": "author",
+            "status": "active",
+            "createdAt": "2024-02-06T13:50:55.000000Z",
+            "updatedAt": "2024-02-06T13:50:55.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+
+# Fetch single user
+
+**Section:** Auth Routes → Users
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/users/:user`
-
 
 ## Overview
 
@@ -3121,13 +4223,48 @@ This response is returned when the authenticated user does not have sufficient p
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Store a new user
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "name": "Admin",
+        "username": "admin",
+        "email": "admin@mail.to",
+        "role": "admin",
+        "status": "active"
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+
+# Store a new user
+
+**Section:** Auth Routes → Users
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/users`
-
 
 ## Overview
 
@@ -3252,13 +4389,65 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update a user
+### Created 201 (`201`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "User created successfully.",
+    "data": {
+        "name": "Lucas",
+        "username": "lucas",
+        "email": "lucas@mail.to",
+        "role": "author",
+        "status": "inactive"
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 4 more errors)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "username": [
+            "The username field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ],
+        "role": [
+            "The role field is required."
+        ],
+        "password": [
+            "The password field is required."
+        ]
+    }
+}
+```
+
+
+# Update a user
+
+**Section:** Auth Routes → Users
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/users/:user`
-
 
 ## Overview
 
@@ -3409,13 +4598,74 @@ When the specified user ID does not exist, the API returns a `404 Not Found` sta
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a user
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "User updated successfully.",
+    "data": {
+        "name": "Lucas",
+        "username": "lucas",
+        "email": "lucas@mail.to",
+        "role": "editor",
+        "status": "active"
+    }
+}
+```
 
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
+
+### Unprocessable Content 422 (``)
+
+```json
+{
+    "message": "The name field is required. (and 4 more errors)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "username": [
+            "The username field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ],
+        "role": [
+            "The role field is required."
+        ],
+        "password": [
+            "The password field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a user
+
+**Section:** Auth Routes → Users
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/users/:user`
-
 
 ## Overview
 
@@ -3513,16 +4763,42 @@ Before deleting a user, consider the following:
 
 💡 **Tip:** Before deleting a user in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Comments
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "User deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+### Forbidden 403 (`403`)
+
+```json
+{
+    "success": false,
+    "message": "You do not have permission to perform this action."
+}
+```
 
 
-#### Fetch all comments
+# Fetch all comments
 
-**Method:** `GET`
+**Section:** Auth Routes → Comments
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/comments/all`
-
 
 ## Overview
 
@@ -3650,13 +4926,74 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
     
 - The response will be an array of comments, even if there are no comments available, in which case the array will be empty.
 
+## Example Responses
 
-#### Change comment status
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "Suariz",
+            "email": "suariz@mail.to",
+            "body": "This is just comment for testing.",
+            "status": "approved",
+            "post": {
+                "id": 3,
+                "title": "Sample blog post 3"
+            },
+            "createdAt": "2024-02-06T18:11:55.000000Z",
+            "updatedAt": "2024-02-06T18:11:55.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Nikola",
+            "email": "nikola@mail.to",
+            "body": "This is just comment for testing.",
+            "status": "approved",
+            "post": {
+                "id": 2,
+                "title": "Sample blog post 2"
+            },
+            "createdAt": "2024-02-06T18:22:43.000000Z",
+            "updatedAt": "2024-02-06T18:22:43.000000Z"
+        },
+        {
+            "id": 1,
+            "name": "Youcef",
+            "email": "youcef@mail.to",
+            "body": "This is just comment for testing.",
+            "status": "approved",
+            "post": {
+                "id": 1,
+                "title": "Sample blog post 1"
+            },
+            "createdAt": "2024-02-06T18:33:43.000000Z",
+            "updatedAt": "2024-02-06T18:33:43.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Change comment status
+
+**Section:** Auth Routes → Comments
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/comments/change-status/:comment`
-
 
 ## Overview
 
@@ -3756,13 +5093,43 @@ When the specified comment ID does not exist, the API returns a `404 Not Found` 
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a comment
+### Success 200 (`200`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Comment status changed successfully.",
+    "data": {
+        "name": "David",
+        "email": "david@mail.to",
+        "body": "This is just comment for testing.",
+        "status": "hidden",
+        "post": {
+            "id": 1,
+            "title": "Sample blog post 1"
+        }
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Delete a comment
+
+**Section:** Auth Routes → Comments
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/comments/delete/:comment`
-
 
 ## Overview
 
@@ -3846,16 +5213,33 @@ Before deleting a comment, consider the following:
 
 💡 **Tip:** Before deleting a comment in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Notes
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Comment deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Fetch all notes
+# Fetch all notes
 
-**Method:** `GET`
+**Section:** Auth Routes → Notes
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/notes/all`
-
 
 ## Overview
 
@@ -3950,13 +5334,50 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
     
 - The response will be an array of notes, even if there are no notes available, in which case the array will be empty.
 
+## Example Responses
 
-#### Store a new note
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3, 
+            "title": "Untitled note 3",
+            "content": "This is just untitled note content."
+        },
+        {
+            "id": 2,
+            "title": "Untitled note 2",
+            "content": "This is just untitled note content."
+        },
+        {
+            "id": 1,
+            "title": "Untitled note 1",
+            "content": "This is just untitled note content."
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Store a new note
+
+**Section:** Auth Routes → Notes
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/notes/save`
-
 
 ## Overview
 
@@ -4053,13 +5474,48 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the nesscessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Delete a note
+### Created 201 (`201`)
 
-**Method:** `DELETE`
+```json
+{
+    "success": true,
+    "message": "Note created successfully.",
+    "data": {
+        "id": 1,
+        "title": "Untitled Note 1",
+        "content": "This is just untitled note content."
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The title field is required. (and 2 more errors)",
+    "errors": {
+        "title": [
+            "The title field is required."
+        ],
+        "slug": [
+            "The slug field is required."
+        ],
+        "content": [
+            "The content field is required."
+        ]
+    }
+}
+```
+
+
+# Delete a note
+
+**Section:** Auth Routes → Notes
+
+**Method:** `DELETE`  
 **Endpoint:** `{{url}}/{{version}}/admin/notes/delete/:note`
-
 
 ## Overview
 
@@ -4143,16 +5599,33 @@ Before deleting a note, consider the following:
 
 💡 **Tip:** Before deleting a note in production, test the operation in a development or staging environment to understand the full impact.
 
+## Example Responses
 
-## Profile
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Note deleted successfully."
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Profile details
+# Profile details
 
-**Method:** `GET`
+**Section:** Auth Routes → Profile
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/admin/profile/details`
-
 
 ## Overview
 
@@ -4216,13 +5689,29 @@ The API returns a `200 OK` status with the current authenticated user profile de
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Update profile
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": {
+        "name": "Admin",
+        "username": "admin",
+        "email": "admin@mail.to",
+        "role": "admin"
+    }
+}
+```
 
+
+# Update profile
+
+**Section:** Auth Routes → Profile
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/profile/update`
-
 
 ## Overview
 
@@ -4328,13 +5817,49 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-#### Change password
+### Success 200 (`200`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "message": "Profile updated successfully.",
+    "data": {
+        "name": "Adam",
+        "username": "adam",
+        "email": "adam@mail.to",
+        "role": "admin"
+    }
+}
+```
 
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 1 more error)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "username": [
+            "The username field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ]
+    }
+}
+```
+
+
+# Change password
+
+**Section:** Auth Routes → Profile
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/admin/profile/change-password`
-
 
 ## Overview
 
@@ -4442,19 +5967,52 @@ When the request data fails validation (e.g., missing required fields, invalid f
 
 - Ensure that you have the necessary permissions to access this endpoint, as it is intended for admin use.
 
+## Example Responses
 
-# Front Routes
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "message": "Password changed successfully."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "success": false,
+    "error": "The old password is incorrect."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The old password field is required. (and 2 more errors)",
+    "errors": {
+        "old_password": [
+            "The old password field is required."
+        ],
+        "new_password": [
+            "The new password field is required."
+        ],
+        "confirm_password": [
+            "The confirm password field is required."
+        ]
+    }
+}
+```
 
 
-## Home
+# Index
 
+**Section:** Front Routes → Home
 
-#### Index
-
-**Method:** `GET`
-
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}`
-
 
 ## Overview
 
@@ -4639,16 +6197,124 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
 
 - The response will be an list of latest data ( categories / posts / tags ), even if there are no data ( categories / posts / tags ) available, in which case the list will be empty.
 
+## Example Responses
 
-## Blog
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "data": {
+        "posts": [
+            {
+                "title": "Sample Blog Post 3",
+                "slug": "sample-blog-post-3",
+                "intro": "sample blog post intro.",
+                "content": "sample blog post content.",
+                "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHDzSa.png",
+                "author": {
+                    "name": "Admin",
+                    "username": "admin"
+                },
+                "category": {
+                    "name": "IT Support",
+                    "slug": "it-support"
+                },
+                "tags": [
+                    {
+                        "name": "Linux",
+                        "slug": "linux"
+                    }
+                ],
+                "createdAt": "2024-02-06T17:21:24.000000Z",
+                "updatedAt": "2024-02-06T17:21:36.000000Z"
+            },
+            {
+                "title": "Sample Blog Post 2",
+                "slug": "sample-blog-post-2",
+                "intro": "sample blog post intro.",
+                "content": "sample blog post content.",
+                "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHDzAq.png",
+                "author": {
+                    "name": "Admin",
+                    "username": "admin"
+                },
+                "category": {
+                    "name": "Network Engineering",
+                    "slug": "network-engineering"
+                },
+                "tags": [
+                    {
+                        "name": "Linux",
+                        "slug": "linux"
+                    }
+                ],
+                "createdAt": "2024-02-06T17:31:24.000000Z",
+                "updatedAt": "2024-02-06T17:31:36.000000Z"
+            },
+            {
+                "title": "Sample Blog Post 1",
+                "slug": "sample-blog-post-1",
+                "intro": "sample blog post intro.",
+                "content": "sample blog post content.",
+                "image": "http://127.0.0.1:8000/storage/posts/6MFCr03W5VyDGBGz86qxv0ELUrvOmFefynoHGzAq.png",
+                "author": {
+                    "name": "Admin",
+                    "username": "admin"
+                },
+                "category": {
+                    "name": "Software Testing",
+                    "slug": "software-testing"
+                },
+                "tags": [
+                    {
+                        "name": "Linux",
+                        "slug": "linux"
+                    }
+                ],
+                "createdAt": "2024-02-06T17:41:24.000000Z",
+                "updatedAt": "2024-02-06T17:41:36.000000Z"
+            }
+        ],
+        "tags": [
+            {
+                "name": "Linux",
+                "slug": "linux"
+            },
+            {
+                "name": "Blockchain",
+                "slug": "blockchain"
+            },
+            {
+                "name": "DevOps",
+                "slug": "devops"
+            }
+        ],
+        "categories": [
+            {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            {
+                "name": "Software Testing",
+                "slug": "software-testing"
+            },
+            {
+                "name": "Network Engineering",
+                "slug": "network-engineering"
+            }
+        ]
+    }
+}
+```
 
 
-#### Index
+# Index
 
-**Method:** `GET`
+**Section:** Front Routes → Blog
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog`
-
 
 ## Overview
 
@@ -4812,13 +6478,104 @@ When successful, this endpoint returns a `200 OK` status with a JSON response co
 
 - The response will be an list of posts, even if there are no posts available, in which case the array will be empty.
 
+## Example Responses
 
-#### Post details
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "title": "Sample blog post 3",
+            "slug": "sample-blog-post-3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:11:24.000000Z",
+            "updatedAt": "2024-02-06T18:11:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 2",
+            "slug": "sample-blog-post-2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1hdAr.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:22:24.000000Z",
+            "updatedAt": "2024-02-06T18:22:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 1",
+            "slug": "sample-blog-post-1",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQyKdAze.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:33:24.000000Z",
+            "updatedAt": "2024-02-06T18:33:24.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+
+# Post details
+
+**Section:** Front Routes → Blog
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog/:slug`
-
 
 ## Overview
 
@@ -4935,13 +6692,55 @@ When the specified post slug does not exist, the API returns a `404 Not Found` s
     
 - Slugs typically use lowercase letters, numbers, and hyphens (no spaces or special characters).
 
+## Example Responses
 
-#### Fetch posts by category
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": {
+        "title": "Sample blog post 1",
+        "slug": "sample-blog-post-1",
+        "intro": "sample blog post intro.",
+        "content": "sample blog post content.",
+        "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+        "author": {
+            "name": "Admin",
+            "username": "admin"
+        },
+        "category": {
+            "name": "IT Support",
+            "slug": "it-support"
+        },
+        "tags": [
+            {
+                "name": "Linux",
+                "slug": "linux"
+            }
+        ],
+        "createdAt": "2024-02-06T18:22:24.000000Z",
+        "updatedAt": "2024-02-06T18:22:24.000000Z"
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Fetch posts by category
+
+**Section:** Front Routes → Blog
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog/categories/:slug`
-
 
 ## Overview
 
@@ -5125,13 +6924,113 @@ When the specified category slug does not exist, the API returns a `404 Not Foun
     
 - Slugs typically use lowercase letters, numbers, and hyphens (no spaces or special characters).
 
+## Example Responses
 
-#### Fetch posts by tag
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "title": "Sample blog post 3",
+            "slug": "sample-blog-post-3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:11:24.000000Z",
+            "updatedAt": "2024-02-06T18:11:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 2",
+            "slug": "sample-blog-post-2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1hdAr.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:22:24.000000Z",
+            "updatedAt": "2024-02-06T18:22:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 1",
+            "slug": "sample-blog-post-1",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQyKdAze.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:33:24.000000Z",
+            "updatedAt": "2024-02-06T18:33:24.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Fetch posts by tag
+
+**Section:** Front Routes → Blog
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog/tags/:slug`
-
 
 ## Overview
 
@@ -5315,13 +7214,113 @@ When the specified tag slug does not exist, the API returns a `404 Not Found` st
     
 - Slugs typically use lowercase letters, numbers, and hyphens (no spaces or special characters).
 
+## Example Responses
 
-#### Fetch posts by author
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "title": "Sample blog post 3",
+            "slug": "sample-blog-post-3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:11:24.000000Z",
+            "updatedAt": "2024-02-06T18:11:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 2",
+            "slug": "sample-blog-post-2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1hdAr.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:22:24.000000Z",
+            "updatedAt": "2024-02-06T18:22:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 1",
+            "slug": "sample-blog-post-1",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQyKdAze.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:33:24.000000Z",
+            "updatedAt": "2024-02-06T18:33:24.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Fetch posts by author
+
+**Section:** Front Routes → Blog
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog/authors/:username`
-
 
 ## Overview
 
@@ -5505,13 +7504,113 @@ When the specified user username does not exist, the API returns a `404 Not Foun
     
 - Usernames typically use lowercase letters, numbers, and hyphens (no spaces or special characters).
 
+## Example Responses
 
-#### Fetch related posts
+### Success 200 (`200`)
 
-**Method:** `GET`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "title": "Sample blog post 3",
+            "slug": "sample-blog-post-3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:11:24.000000Z",
+            "updatedAt": "2024-02-06T18:11:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 2",
+            "slug": "sample-blog-post-2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1hdAr.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:22:24.000000Z",
+            "updatedAt": "2024-02-06T18:22:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 1",
+            "slug": "sample-blog-post-1",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQyKdAze.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:33:24.000000Z",
+            "updatedAt": "2024-02-06T18:33:24.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Fetch related posts
+
+**Section:** Front Routes → Blog
+
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/blog/related/:slug`
-
 
 ## Overview
 
@@ -5654,16 +7753,90 @@ When the specified post does not exist, the API returns a `404 Not Found` status
     
 - Slugs typically use lowercase letters, numbers, and hyphens (no spaces or special characters).
 
+## Example Responses
 
-## Comments
+### Success 200 (`200`)
+
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "title": "Sample blog post 3",
+            "slug": "sample-blog-post-3",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1oqeq.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:11:24.000000Z",
+            "updatedAt": "2024-02-06T18:11:24.000000Z"
+        },
+        {
+            "title": "Sample blog post 2",
+            "slug": "sample-blog-post-2",
+            "intro": "sample blog post intro.",
+            "content": "sample blog post content.",
+            "image": "http://127.0.0.1:8000/storage/posts/4pslKDfZYkrgZpYi4D56kayI6UiiACaTlQy1hdAr.png",
+            "author": {
+                "name": "Admin",
+                "username": "admin"
+            },
+            "category": {
+                "name": "IT Support",
+                "slug": "it-support"
+            },
+            "tags": [
+                {
+                    "name": "Linux",
+                    "slug": "linux"
+                }
+            ],
+            "createdAt": "2024-02-06T18:22:24.000000Z",
+            "updatedAt": "2024-02-06T18:22:24.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
+
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
 
 
-#### Fetch related comments
+# Fetch related comments
 
-**Method:** `GET`
+**Section:** Front Routes → Comments
 
+**Method:** `GET`  
 **Endpoint:** `{{url}}/{{version}}/comments/related/:slug`
-
 
 ## Overview
 
@@ -5776,13 +7949,65 @@ When the specified post does not exist, the API returns a `404 Not Found` status
 
  ```
 
+## Example Responses
 
-#### Store a new comment
+### Success 200 (`404`)
 
-**Method:** `POST`
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 3,
+            "name": "Suariz",
+            "email": "suariz@mail.to",
+            "body": "This is just comment for testing.",
+            "createdAt": "2024-02-06T18:11:55.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Nikola",
+            "email": "nikola@mail.to",
+            "body": "This is just comment for testing.",
+            "createdAt": "2024-02-06T18:22:43.000000Z"
+        },
+        {
+            "id": 1,
+            "name": "Youcef",
+            "email": "youcef@mail.to",
+            "body": "This is just comment for testing.",
+            "createdAt": "2024-02-06T18:33:43.000000Z"
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "lastPage": 1,
+        "perPage": 10,
+        "total": 3,
+        "links": {
+            "nextPageUrl": null,
+            "previousPageUrl": null
+        }
+    }
+}
+```
 
+### Not Found 404 (`404`)
+
+```json
+{
+    "success": false,
+    "message": "Record not found."
+}
+```
+
+
+# Store a new comment
+
+**Section:** Front Routes → Comments
+
+**Method:** `POST`  
 **Endpoint:** `{{url}}/{{version}}/comments/save-comment/:postID/:parentID/:replyID`
-
 
 ## Overview
 
@@ -5909,3 +8134,60 @@ When the response commet ( `replyID` ) you want to reply to does not exist, the 
 ## Notes
 
 - Consider implementing rate limiting for this endpoint to prevent abuse.
+
+## Example Responses
+
+### Created 201 (`201`)
+
+```json
+{
+    "success": true,
+    "message": "Thank you for your comments."
+}
+```
+
+### Unprocessable Content 422 (`422`)
+
+```json
+{
+    "message": "The name field is required. (and 2 more errors)",
+    "errors": {
+        "name": [
+            "The name field is required."
+        ],
+        "body": [
+            "The body field is required."
+        ],
+        "email": [
+            "The email field is required."
+        ]
+    }
+}
+```
+
+### Not Found 404 (`201`)
+
+```json
+{
+    "success": false,
+    "message": "Post not found."
+}
+```
+
+### Not Found 404 (`201`)
+
+```json
+{
+    "success": false,
+    "message": "The comment you want to reply to does not exist."
+}
+```
+
+### Not Found 404 (`201`)
+
+```json
+{
+    "success": false,
+    "message": "The comment you want to reply to does not exist."
+}
+```
