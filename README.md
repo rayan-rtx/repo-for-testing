@@ -11,10 +11,6 @@ The project implements a complete user management system using Laravel Policies 
 - Modular architecture for easy customization and scalability.
 - User authentication and role-based access control.
 - RESTful API for seamless integration with frontend frameworks.
-- Form Request validation.
-- Service Layer architecture.
-- Database seeders and factories.
-- API Resources for response transformation.
 - Media management for images and files.
 - Dashboard with analytics widgets and content overview.
 - SEO-friendly URLs and metadata management.
@@ -28,6 +24,17 @@ Before installing, ensure your environment meets these requirements:
 - MySQL database
 - Composer
 - Web server ( Apache )
+
+## Project Structure
+
+The application follows a layered architecture:
+
+- Controllers handle incoming requests.
+- Services contain business logic.
+- Policies manage authorization.
+- Form Requests handle validation.
+- Resources transform API responses.
+- Models interact with the database.
 
 ## Installation
 
@@ -51,6 +58,14 @@ Follow these steps to install and set up `cms-roles-permissions`:
     ```
 
 4. **Configure your database credentials in .env .**
+    ```.env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=cms-roles-permissions
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
 
 5. **Generate the application key:**
     ```bash
@@ -75,25 +90,6 @@ Follow these steps to install and set up `cms-roles-permissions`:
 9. **Access the API:**
    - API base URL: [http://localhost:8000/v1/api](http://localhost:8000/v1/api)
 
-## Configuration
-
-Most configuration is handled via the `.env` file.
-
-Key settings include:
-
-- **Database**: Set connection URL, host, port, username, and password.
-- **Authentication**: Configure JWT secret and session settings.
-- **Port and Host**: Define server host and port.
-- **API keys**: Add keys for third-party integrations (e.g storage).
-
-## Usage
-
-- Connect your custom frontend or API client to the provided backend endpoints.
-- Use authentication endpoints to manage users, sessions, and access tokens.
-- Manage categories, posts and other content types through the RESTful API.
-- Upload and manage images and files via media-related endpoints.
-- Implement role-based access control in your frontend using data from the backend.
-- Consume the API responses to build tailored content experiences on any platform.
 
 ## API using with Postman
 
@@ -106,26 +102,24 @@ You can test all available API endpoints using the provided Postman collection.
 ### 2. How to Use
 
 1. Open [Postman](https://www.postman.com/downloads/)
-2. Click `Import` → Choose the file you downloaded above.
+2. Click `Import` and Choose the file you downloaded above.
 3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
 4. Use the available requests grouped under:
-   - Guest Routes
-       │
-   - Auth Routes
-       ├── Dashboard
-       ├── Categories
-       ├── Tags
-       ├── Roles
-       ├── Users
-       ├── Comments
-       ├── Notes
-   - Front Routes
-       ├── Home
-       ├── Blog
-       └── Comments
+   - Guest Routes  
+       │  
+   - Auth Routes  
+       ├── Dashboard  
+       ├── Categories  
+       ├── Tags  
+       ├── Roles  
+       ├── Users  
+       ├── Comments  
+       ├── Notes  
+   - Front Routes  
+       ├── Home  
+       ├── Blog  
+       └── Comments  
 
-
-> Some routes require authentication. A sample token is included in the collection as a bearer token under the `Authorization` tab.
 
 ## Contributing
 
