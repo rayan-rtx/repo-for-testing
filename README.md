@@ -105,20 +105,19 @@ You can test all available API endpoints using the provided Postman collection.
 2. Click `Import` and Choose the file you downloaded above.
 3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
 4. Use the available requests grouped under:
-   - Guest Routes  
-       │  
-   - Auth Routes  
-       ├── Dashboard  
-       ├── Categories  
-       ├── Tags  
-       ├── Roles  
-       ├── Users  
-       ├── Comments  
-       ├── Notes  
-   - Front Routes  
-       ├── Home  
-       ├── Blog  
-       └── Comments  
+   📁 Guest Routes  
+   📁 Auth Routes  
+       📁 Dashboard  
+       📁 Categories  
+       📁 Tags  
+       📁 Roles  
+       📁 Users  
+       📁 Comments  
+       📁 Notes  
+   📁 Front Routes  
+       📁 Home  
+       📁 Blog  
+       📁 Comments  
 
 
 ## Contributing
