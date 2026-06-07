@@ -1,4 +1,13 @@
 # Digital Products Store
+# Digital Products Store
+
+![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)
+![JWT](https://img.shields.io/badge/Auth-JWT-black)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+A RESTful API for selling and delivering digital products.
 
 ## Overview
 
