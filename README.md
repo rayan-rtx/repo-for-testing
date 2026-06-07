@@ -28,25 +28,135 @@ The application follows a layered architecture :
 
 ## Database Schema
 
-![Database Schema](docs/images/database-schema.png)
-
 ## Database Schema
 
 ```mermaid
 erDiagram
 
-    USERS ||--o{ POSTS : creates
-    USERS ||--o{ COMMENTS : writes
+    USERS {
+        bigint id PK
+        string name
+        string username
+        string email
+        string password
+        enum status
+        timestamps
+    }
+
+    CATEGORIES {
+        bigint id PK
+        string name
+        string slug
+        enum show_in_home
+        bigint user_id FK
+        timestamps
+    }
+
+    TAGS {
+        bigint id PK
+        string name
+        string slug
+        enum show_in_home
+        bigint user_id FK
+        timestamps
+    }
+
+    POSTS {
+        bigint id PK
+        string title
+        string slug
+        string intro
+        text content
+        string image
+        enum is_featured
+        enum status
+        bigint category_id FK
+        bigint user_id FK
+        timestamps
+    }
+
+    COMMENTS {
+        bigint id PK
+        string name
+        string email
+        string body
+        enum status
+        bigint post_id FK
+        bigint parent_id FK
+        bigint reply_id FK
+        timestamps
+    }
+
+    NOTES {
+        bigint id PK
+        string title
+        string slug
+        string content
+        bigint user_id FK
+        timestamps
+    }
+
+    ROLES {
+        bigint id PK
+        string name
+        string guard_name
+        timestamps
+    }
+
+    PERMISSIONS {
+        bigint id PK
+        string name
+        string guard_name
+        timestamps
+    }
+
+    POST_TAG {
+        bigint id PK
+        bigint post_id FK
+        bigint tag_id FK
+        timestamps
+    }
+
+    MODEL_HAS_ROLES {
+        bigint role_id FK
+        bigint model_id
+        string model_type
+    }
+
+    MODEL_HAS_PERMISSIONS {
+        bigint permission_id FK
+        bigint model_id
+        string model_type
+    }
+
+    ROLE_HAS_PERMISSIONS {
+        bigint role_id FK
+        bigint permission_id FK
+    }
+
     USERS ||--o{ CATEGORIES : creates
     USERS ||--o{ TAGS : creates
+    USERS ||--o{ POSTS : creates
+    USERS ||--o{ NOTES : creates
 
     CATEGORIES ||--o{ POSTS : contains
 
     POSTS ||--o{ COMMENTS : has
-    POSTS }o--o{ TAGS : belongs_to
 
-    ROLES }o--o{ USERS : assigned_to
-    ROLES }o--o{ PERMISSIONS : grants
+    COMMENTS ||--o{ COMMENTS : parent
+    COMMENTS ||--o{ COMMENTS : reply
+
+    POSTS ||--o{ POST_TAG : tagged
+    TAGS ||--o{ POST_TAG : assigned
+
+    USERS ||--o{ MODEL_HAS_ROLES : assigned
+    ROLES ||--o{ MODEL_HAS_ROLES : contains
+
+    USERS ||--o{ MODEL_HAS_PERMISSIONS : granted
+    PERMISSIONS ||--o{ MODEL_HAS_PERMISSIONS : contains
+
+    ROLES ||--o{ ROLE_HAS_PERMISSIONS : grants
+    PERMISSIONS ||--o{ ROLE_HAS_PERMISSIONS : assigned
 ```
 
 ## Authorization Flow
