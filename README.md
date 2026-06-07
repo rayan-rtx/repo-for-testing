@@ -1,5 +1,4 @@
 # Digital Products Store
-# Digital Products Store
 
 ![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)
@@ -8,25 +7,6 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 A RESTful API for selling and delivering digital products.
-
-# Digital Products Store
-
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://www.php.net)
-[![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)](https://www.mysql.com)
-[![JWT Auth](https://img.shields.io/badge/JWT-Authentication-black)](https://jwt.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
-[![Stars](https://img.shields.io/github/stars/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/stargazers)
-[![Forks](https://img.shields.io/github/forks/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/network/members)
-[![Issues](https://img.shields.io/github/issues/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/issues)
-[![License](https://img.shields.io/github/license/rayanguendouz/digital-products-store)](LICENSE)
-
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)](https://www.php.net)
-[![JWT](https://img.shields.io/badge/Auth-JWT-black)](https://jwt.io)
-[![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)](https://www.mysql.com)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## Overview
 
