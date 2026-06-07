@@ -17,7 +17,7 @@ The project implements a complete user management system using Laravel Policies 
 
 ## Project Structure
 
-The application follows a layered architecture:
+The application follows a layered architecture :
 
 - Controllers handle incoming requests.
 - Services contain business logic.
@@ -30,22 +30,41 @@ The application follows a layered architecture:
 
 ![Database Schema](docs/images/database-schema.png)
 
+## Database Schema
+
+```mermaid
+erDiagram
+
+    USERS ||--o{ POSTS : creates
+    USERS ||--o{ COMMENTS : writes
+    USERS ||--o{ CATEGORIES : creates
+    USERS ||--o{ TAGS : creates
+
+    CATEGORIES ||--o{ POSTS : contains
+
+    POSTS ||--o{ COMMENTS : has
+    POSTS }o--o{ TAGS : belongs_to
+
+    ROLES }o--o{ USERS : assigned_to
+    ROLES }o--o{ PERMISSIONS : grants
+```
+
 ## Authorization Flow
 
-The application implements a hybrid authorization model using:
+The application implements a hybrid authorization model using :
 
 * Spatie Laravel Permission for permissions
 * Laravel Policies for ownership and hierarchy validation
 
 ### Role Hierarchy
 
-The system defines a hierarchy between roles:
+The system defines a hierarchy between roles :
 
 ```text
 Admin (Level 3)
-    ↑
+       ↑
 Editor (Level 2)
-    ↑
+       ↑
 Author (Level 1)
 ```
 
@@ -172,7 +191,13 @@ Allowed
 
 Users can delete resources owned by lower roles.
 
-Example:
+Example :
+
+```text
+Admin deletes Editor post
+    ↓
+Allowed
+```
 
 ```text
 Admin deletes Author post
@@ -190,10 +215,22 @@ Allowed
 
 Users cannot delete resources owned by another user with the same role.
 
-Example:
+Example :
+
+```text
+Admin A deletes Admin B post
+    ↓
+Denied
+```
 
 ```text
 Editor A deletes Editor B post
+    ↓
+Denied
+```
+
+```text
+Author A deletes Author B post
     ↓
 Denied
 ```
@@ -202,10 +239,16 @@ Denied
 
 Users cannot delete resources owned by higher roles.
 
-Example:
+Example :
 
 ```text
 Author deletes Editor post
+    ↓
+Denied
+```
+
+```text
+Author deletes Admin post
     ↓
 Denied
 ```
@@ -219,7 +262,7 @@ Denied
 ### Special User Rules
 
 The primary administrator account is protected.
-User ID 1 cannot be updated or deleted.
+User ID 1 cannot be updated or deleted :
 
 ```php
 if ($targetUser->id == 1) {
@@ -231,7 +274,7 @@ This prevents accidental modification or deletion of the system administrator.
 
 ### Special Role Rules
 
-Roles assigned to users cannot be deleted.
+Roles assigned to users cannot be deleted :
 
 ```php
 if ($role->users->count()) {
@@ -256,7 +299,7 @@ This design combines Role-Based Access Control, resource ownership, and role hie
 
 ## Requirements
 
-Before installing, ensure your environment meets these requirements:
+Before installing, ensure your environment meets these requirements :
 
 - PHP ( version 8.x )
 - Laravel ( version 10.x )
@@ -268,24 +311,24 @@ Before installing, ensure your environment meets these requirements:
 
 Follow these steps to install and set up `cms-roles-permissions` project :
 
-1. **Clone the repository:**
+1. **Clone the repository :**
    ```bash
    git clone https://github.com/rayanguendouz/cms-roles-permissions.git
    cd cms-roles-permissions
    ```
 
-2. **Install dependencies:**
+2. **Install dependencies :**
    ```bash
    composer install
    ```
 
-3. **Create the environment file:**
+3. **Create the environment file :**
 
     ```bash
     cp .env.example .env
     ```
 
-4. **Configure your database credentials in .env .**
+4. **Configure your database credentials in .env :**
     ```.env
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -295,33 +338,33 @@ Follow these steps to install and set up `cms-roles-permissions` project :
     DB_PASSWORD=
     ```
 
-5. **Generate the application key:**
+5. **Generate the application key :**
     ```bash
     php artisan key:generate
     ```
 
-6. **Run database migrations and seeders:**
+6. **Run database migrations and seeders :**
    ```bash
    php artisan migrate --seed
    ```
 
-7. **Create a symbolic link for storage:**
+7. **Create a symbolic link for storage :**
     ```bash
     php artisan storage:link
     ```
 
 ## Usage
 
-Follow these steps to run `cms-roles-permissions` project:
+Follow these steps to run `cms-roles-permissions` project :
 
 
-1. **Run the application:**
+1. **Run the application :**
    ```bash
    php artisan serve
    ```
 
-2. **Access the API:**
-   - API base URL: [http://localhost:8000/v1/api](http://localhost:8000/v1/api)
+2. **Access the API :**
+   - API base URL : [http://localhost:8000/v1/api](http://localhost:8000/v1/api)
 
 
 ## API testing with Postman
@@ -337,7 +380,7 @@ You can test all available API endpoints using the provided Postman collection.
 1. Open [Postman](https://www.postman.com/downloads/)
 2. Click `Import` and Choose the file you downloaded above.
 3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
-4. Use the available requests grouped under:  
+4. Use the available requests grouped under :  
    📁 Guest Routes  
        │  
    📁 Auth Routes  
@@ -348,16 +391,17 @@ You can test all available API endpoints using the provided Postman collection.
        ├── 📁 Users  
        ├── 📁 Comments  
        ├── 📁 Notes  
+       │  
    📁 Front Routes  
        ├── 📁 Home  
        ├── 📁 Blog  
        └── 📁 Comments  
 
-5. Check the full documentation via the following link: https://documenter.getpostman.com/view/YOUR_WORKSPACE_ID/YOUR_DOCUMENT_ID
+5. Check the full documentation via the following link : https://documenter.getpostman.com/view/YOUR_WORKSPACE_ID/YOUR_DOCUMENT_ID
 
 ## Contributing
 
-We welcome contributions! Please follow these guidelines:
+We welcome contributions! Please follow these guidelines :
 
 - Fork the repository and create a new branch for your feature or fix.
 - Write clear commit messages and document your code.
