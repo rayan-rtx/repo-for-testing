@@ -1,8 +1,8 @@
 # Digital Products Store
 
-![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)
+![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
 ![JWT](https://img.shields.io/badge/Auth-JWT-black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
@@ -14,17 +14,17 @@ The `digital-products-store` repository is a RESTful marketplace API built with 
 
 The project is a **Digital Products Marketplace** supporting **Multi-authentication ( vendor / client )**, product management, digital product delivery and **payment processing via [ChargilyPay](https://chargily.com/)**. Vendors can upload digital modules and clients can securely purchase and download them.
 
-The platform supports:
+The platform supports :
 
-* Multi-authentication ( Vendor / Client ).
-* Product management.
-* Order management.
-* Product reviews and ratings.
-* Secure digital file delivery.
-* Online payments through [ChargilyPay](https://chargily.com/).
-* Storefront browsing for guests.
+- Multi-authentication ( Vendor / Client ).
+- Product management.
+- Order management.
+- Product reviews and ratings.
+- Secure digital file delivery.
+- Online payments through [ChargilyPay](https://chargily.com/).
+- Storefront browsing for guests.
 
-Typical products include:
+Typical products include :
 
 * Source code.
 * Templates.
