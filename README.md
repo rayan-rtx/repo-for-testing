@@ -1,24 +1,66 @@
 # Digital Products Store
 
-## Introduction
+## Overview
 
-The `digital-products-store` repository is REST API that provides ...
+The `digital-products-store` repository is a RESTful marketplace API built with Laravel that enables vendors to sell digital products and clients to purchase and download them securely.
 
-The project is a **Digital Products Marketplace** supporting **Multi-authentication ( vendor / client )**, product management, digital product delivery and **payment processing via [ChargilyPay](https://chargily.com/)**. Vendors can upload digital modules (e.g `.zip` files) and clients can securely purchase and download them.
+The project is a **Digital Products Marketplace** supporting **Multi-authentication ( vendor / client )**, product management, digital product delivery and **payment processing via [ChargilyPay](https://chargily.com/)**. Vendors can upload digital modules and clients can securely purchase and download them.
 
-## Features
+The platform supports:
 
-- Modular architecture for easy customization and scalability.
-- Multi-authentication user ( vendor / client ).
-- RESTful API for seamless integration with frontend frameworks.
-- Media management for images and files.
-- Vendor dashboard with orders and products analytics.
-- Vendor store management ( categories / products / orders / client / reviews / profile ).
-- Client panel with own orders and profile details.
-- Public Store front listing for clients / guests.
-- Product details with reviews and ratings.
-- Payment gateway integration via [**ChargilyPay**](https://chargily.com/), supporting methods like **CIB** and **Edahabia**,
-- SEO-friendly URLs and metadata management.
+* Multi-authentication ( Vendor / Client ).
+* Product management.
+* Order management.
+* Product reviews and ratings.
+* Secure digital file delivery.
+* Online payments through [ChargilyPay](https://chargily.com/).
+* Storefront browsing for guests.
+
+Typical products include:
+
+* Source code.
+* Templates.
+* E-books.
+* Courses.
+* Design assets.
+* ZIP packages.
+
+## Key Features
+
+### Vendor Features
+
+* Vendor registration and authentication
+* Dashboard analytics
+* Category management
+* Product management
+* Product image uploads
+* Digital file uploads
+* Order tracking
+* Customer management
+* Review management
+* Store profile management
+
+### Client Features
+
+* Registration and authentication
+* Purchase digital products
+* Download purchased products
+* Order history
+* Product reviews
+* Profile management
+* Browse products
+
+### Marketplace Features
+
+* Public storefront
+* Product search and filtering
+* Product ratings
+* SEO-friendly slugs
+* Secure payment integration
+
+## Payment Process
+
+
 
 ## Project Structure
 
@@ -32,7 +74,91 @@ The application follows a layered architecture :
 
 ## Database Schema
 
+```mermaid
+erDiagram
 
+    VENDORS {
+        bigint id PK
+        string name
+        string email UK
+        string password
+    }
+
+    CLIENTS {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        enum status
+    }
+
+    CATEGORIES {
+        bigint id PK
+        string name
+        string slug UK
+        enum show_in_home
+        bigint parent_id FK
+    }
+
+    PRODUCTS {
+        bigint id PK
+        string name
+        string slug UK
+        decimal price
+        integer quantity
+        text description
+        string image
+        string file
+        enum status
+        bigint category_id FK
+        bigint vendor_id FK
+    }
+
+    ORDERS {
+        bigint id PK
+        decimal total
+        decimal subtotal
+        integer product_qty
+        string payment_method
+        enum status
+        bigint product_id FK
+        bigint client_id FK
+    }
+
+    DOWNLOADS {
+        bigint id PK
+        string token UK
+        integer max_downloads
+        integer downloaded_count
+        timestamp expires_at
+        bigint order_id FK
+    }
+
+    REVIEWS {
+        bigint id PK
+        integer rate
+        string comment
+        enum status
+        bigint client_id FK
+        bigint product_id FK
+    }
+
+    VENDORS ||--o{ PRODUCTS : owns
+
+    CATEGORIES ||--o{ CATEGORIES : parent_of
+
+    CATEGORIES ||--o{ PRODUCTS : contains
+
+    CLIENTS ||--o{ ORDERS : places
+
+    PRODUCTS ||--o{ ORDERS : purchased
+
+    ORDERS ||--|| DOWNLOADS : generates
+
+    CLIENTS ||--o{ REVIEWS : writes
+
+    PRODUCTS ||--o{ REVIEWS : receives
+```
 
 ## Requirements
 
@@ -117,7 +243,7 @@ You can test all available API endpoints using the provided Postman collection.
 
 ### 1. Download the Collection
 
-[CMS Roles Permissions Postman Collection](collection.json)
+[Digital Products Store Postman Collection](collection.json)
 
 ### 2. How to Use
 
@@ -125,10 +251,12 @@ You can test all available API endpoints using the provided Postman collection.
 2. Click `Import` and Choose the file you downloaded above.
 3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
 4. Use the available requests grouped under :  
+
    📁 Vendor Routes  
        ├── 📁 Guest Routes  
-       │      │  
+       │    │  
        ├── 📁 Auth Routes  
+       │    │  
        │    ├── 📁 Dashboard  
        │    ├── 📁 Categories  
        │    ├── 📁 Products  
@@ -136,21 +264,37 @@ You can test all available API endpoints using the provided Postman collection.
        │    ├── 📁 Orders  
        │    ├── 📁 Clients  
        │    ├── 📁 Profile  
-   📁 Vendor Routes  
+       │    │  
+   📁 Client Routes  
        ├── 📁 Guest Routes  
-       │      │  
+       │    │  
        ├── 📁 Auth Routes  
+       │    │  
        │    ├── 📁 Orders  
        │    ├── 📁 Downloads  
        │    ├── 📁 Checkout  
        │    ├── 📁 Reviews  
-       │    ├── 📁 Profile  
+       │    ├── 📁 Profile
+       │    │  
    📁 Front Routes  
        ├── 📁 Home  
        ├── 📁 Shop  
        └── 📁 Reviews  
 
 5. Check the full documentation via the following link : https://documenter.getpostman.com/view/YOUR_WORKSPACE_ID/YOUR_DOCUMENT_ID
+
+## Roadmap
+
+You can work on the following improvements :
+
+- Wishlist
+- Product favorites
+- Coupons and discounts
+- Vendor subscriptions
+- Product licensing system
+- Advanced analytics
+- Email notifications
+- Multi-language support
 
 ## Contributing
 
