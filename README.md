@@ -17,6 +17,11 @@ A RESTful API for selling and delivering digital products.
 [![JWT Auth](https://img.shields.io/badge/JWT-Authentication-black)](https://jwt.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+[![Stars](https://img.shields.io/github/stars/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/stargazers)
+[![Forks](https://img.shields.io/github/forks/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/network/members)
+[![Issues](https://img.shields.io/github/issues/rayanguendouz/digital-products-store)](https://github.com/rayanguendouz/digital-products-store/issues)
+[![License](https://img.shields.io/github/license/rayanguendouz/digital-products-store)](LICENSE)
+
 ## Overview
 
 The `digital-products-store` repository is a RESTful marketplace API built with Laravel that enables vendors to sell digital products and clients to purchase and download them securely.
