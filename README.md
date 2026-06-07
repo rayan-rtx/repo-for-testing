@@ -32,26 +32,28 @@ The application follows a layered architecture:
 
 ## Authorization Flow
 
-The application uses a two stages authorization system based on:
+The application implements a hybrid authorization model using:
 
-* Spatie Laravel Permission for Role-Based Access Control.
-* Laravel Policies for resource ownership authorization.
+* Spatie Laravel Permission for permissions
+* Laravel Policies for ownership and hierarchy validation
 
----
+### Role Hierarchy
 
-### Roles
+The system defines a hierarchy between roles:
 
-The system defines three default roles:
+```text
+Admin (Level 3)
+    ↑
+Editor (Level 2)
+    ↑
+Author (Level 1)
+```
 
-| Role   | Description                                     |
-| ------ | ----------------------------------------------- |
-| Admin  | Full system access                              |
-| Editor | Content management access                       |
-| Author | Content creation and ownership-based management |
+This hierarchy is used when deleting resources.
+A higher role can delete resources created by lower roles.
+A lower role can never delete resources owned by higher roles.
 
----
-
-### Permissions
+### Permission-Based Authorization
 
 #### Category Permissions
 
@@ -94,133 +96,163 @@ The system defines three default roles:
 | update_role |
 | delete_role |
 
-#### User Permissions
+### Ownership Rules
 
-             | Category        | Tag        | Post        | Comment        | Role        | User        |
--------------|-----------------|------------|-------------|----------------|-------------|-------------|
-             | create_category | create_tag | create_post | create_comment | view_users  | view_users  |
- Permissions | update_category | update_tag | update_post | update_comment | create_user | create_user |
-             | delete_category | delete_tag | delete_post | delete_comment | update_user | update_user |
-             |                 |            |             |                | delete_user | delete_user |
+For updates, users may only modify resources they created.
 
----
-
-### Role Permission Matrix
-
-#### Admin
-
-Administrators receive every permission available in the application.
-
-| Module     | Access |
-| ---------- | ------ |
-| Posts      | Full   |
-| Comments   | Full   |
-| Categories | Full   |
-| Tags       | Full   |
-| Roles      | Full   |
-| Users      | Full   |
-
-#### Editor
-
-Editors receive permissions related to content management only.
-
-| Module     | Access    |
-| ---------- | --------- |
-| Posts      | Full      |
-| Comments   | Full      |
-| Categories | Full      |
-| Tags       | Full      |
-| Roles      | No Access |
-| Users      | No Access |
-
-#### Author
-
-Authors receive permissions related to posts and comments only.
-
-| Module     | Access    |
-| ---------- | --------- |
-| Posts      | Limited   |
-| Comments   | Limited   |
-| Categories | No Access |
-| Tags       | No Access |
-| Roles      | No Access |
-| Users      | No Access |
-
----
-
-### Resource Ownership Policies
-
-Permissions determine what actions a user may perform.
-Policies determine on which resources those actions may be performed.
-
-#### Post Authorization
-
-Authors may only modify posts they created.
-
-Example policy rule:
+#### Categories
 
 ```text
-Author
-            ↓
+Can Update Category ?
+        ↓
+Has update_category permission ?
+        ↓
+Category owner ?
+        ↓
+Yes → Access Granted
+No  → Access Denied
+```
+
+#### Tags
+
+```text
+Can Update Tag ?
+        ↓
+Has update_tag permission ?
+        ↓
+Tag owner ?
+        ↓
+Yes → Access Granted
+No  → Access Denied
+```
+
+#### Posts
+
+```text
+Can Update Post ?
+        ↓
 Has update_post permission ?
-            ↓
-Yes
-            ↓
-Owns the post ?
-            ↓
+        ↓
+Post owner ?
+        ↓
 Yes → Access Granted
-No  → Access Denied (403)
+No  → Access Denied
 ```
 
-#### Comment Authorization
-
-Authors may only modify comments they created.
-
-Example policy rule:
+#### Comments
 
 ```text
-Author
-            ↓
+Can Update Comment ?
+        ↓
 Has update_comment permission ?
-            ↓
-Yes
-            ↓
-Owns the comment ?
-            ↓
+        ↓
+Owns the related post ?
+        ↓
 Yes → Access Granted
-No  → Access Denied (403)
+No  → Access Denied
 ```
 
----
+### Deletion Rules
+
+Deletion follows ownership and hierarchy validation.
+
+#### Same Owner
+
+Users can delete resources they own.
+
+```text
+Resource Owner
+    ↓
+Delete Own Resource
+    ↓
+Allowed
+```
+
+#### Higher Role
+
+Users can delete resources owned by lower roles.
+
+Example:
+
+```text
+Admin deletes Author post
+    ↓
+Allowed
+```
+
+```text
+Editor deletes Author post
+    ↓
+Allowed
+```
+
+#### Equal Role
+
+Users cannot delete resources owned by another user with the same role.
+
+Example:
+
+```text
+Editor A deletes Editor B post
+    ↓
+Denied
+```
+
+### Lower Role
+
+Users cannot delete resources owned by higher roles.
+
+Example:
+
+```text
+Author deletes Editor post
+    ↓
+Denied
+```
+
+```text
+Editor deletes Admin post
+    ↓
+Denied
+```
+
+### Special User Rules
+
+The primary administrator account is protected.
+User ID 1 cannot be updated or deleted.
+
+```php
+if ($targetUser->id == 1) {
+    return false;
+}
+```
+
+This prevents accidental modification or deletion of the system administrator.
+
+### Special Role Rules
+
+Roles assigned to users cannot be deleted.
+
+```php
+if ($role->users->count()) {
+    return false;
+}
+```
+
+A role must first be detached from all users before it can be removed.
 
 ### Authorization Matrix
 
-| Action             | Admin | Editor | Author |
-| ------------------ | ----- | ------ | ------ |
-| Create Category    | ✅     | ✅      | ❌      |
-| Update Category    | ✅     | ✅      | ❌      |
-| Delete Category    | ✅     | ✅      | ❌      |
-| Create Tag         | ✅     | ✅      | ❌      |
-| Update Tag         | ✅     | ✅      | ❌      |
-| Delete Tag         | ✅     | ✅      | ❌      |
-| Create Post        | ✅     | ✅      | ✅      |
-| Update Own Post    | ✅     | ✅      | ✅      |
-| Update Any Post    | ✅     | ✅      | ❌      |
-| Delete Own Post    | ✅     | ✅      | ✅      |
-| Delete Any Post    | ✅     | ✅      | ❌      |
-| Create Comment     | ✅     | ✅      | ✅      |
-| Update Own Comment | ✅     | ✅      | ✅      |
-| Update Any Comment | ✅     | ✅      | ❌      |
-| Delete Own Comment | ✅     | ✅      | ✅      |
-| Delete Any Comment | ✅     | ✅      | ❌      |
-| View Roles         | ✅     | ❌      | ❌      |
-| Create Role        | ✅     | ❌      | ❌      |
-| Update Role        | ✅     | ❌      | ❌      |
-| Delete Role        | ✅     | ❌      | ❌      |
-| View Users         | ✅     | ❌      | ❌      |
-| Create User        | ✅     | ❌      | ❌      |
-| Update User        | ✅     | ❌      | ❌      |
-| Delete User        | ✅     | ❌      | ❌      |
+| Resource   | Create     | Update                   | Delete                         |
+| ---------- | ---------- | ------------------------ | ------------------------------ |
+| Categories | Permission | Owner Only               | Owner or Higher Role           |
+| Tags       | Permission | Owner Only               | Owner or Higher Role           |
+| Posts      | Permission | Owner Only               | Owner or Higher Role           |
+| Comments   | Permission | Post Owner Only          | Post Owner or Higher Role      |
+| Users      | Permission | Permission + Not User #1 | Permission + Not User #1       |
+| Roles      | Permission | Permission               | Permission + No Assigned Users |
+
+This design combines Role-Based Access Control, resource ownership, and role hierarchy enforcement to provide fine-grained authorization throughout the application.
 
 ## Requirements
 
