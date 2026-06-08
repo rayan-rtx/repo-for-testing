@@ -1,323 +1,149 @@
-# Digital Products Store
+## Payment Gateway Process
 
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)
-![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
-![JWT](https://img.shields.io/badge/Auth-JWT-black)
-![License](https://img.shields.io/badge/License-MIT-green)
+The application uses a flexible payment gateway architecture that currently supports **ChargilyPay** and can be extended to support additional providers such as Stripe and PayPal.
 
-A RESTful API for selling and delivering digital products.
-
-## Overview
-
-The `digital-products-store` repository is a RESTful marketplace API built with Laravel that enables vendors to sell digital products and clients to purchase and download them securely.
-
-The project is a **Digital Products Marketplace** supporting **Multi-authentication ( vendor / client )**, product management, digital product delivery and **payment processing via [ChargilyPay](https://chargily.com/)**. Vendors can upload digital modules and clients can securely purchase and download them.
-
-The platform supports :
-
-- Multi-authentication ( Vendor / Client ).
-- Product management.
-- Order management.
-- Product reviews and ratings.
-- Secure digital file delivery.
-- Online payments through [ChargilyPay](https://chargily.com/).
-- Storefront browsing for guests.
-
-Typical products include :
-
-* Source code.
-* Templates.
-* E-books.
-* Courses.
-* Design assets.
-* ZIP packages.
-
-## Key Features
-
-### Vendor Features
-
-* Vendor registration and authentication
-* Dashboard analytics
-* Category management
-* Product management
-* Product image uploads
-* Digital file uploads
-* Order tracking
-* Customer management
-* Review management
-* Store profile management
-
-### Client Features
-
-* Registration and authentication
-* Purchase digital products
-* Download purchased products
-* Order history
-* Product reviews
-* Profile management
-* Browse products
-
-### Marketplace Features
-
-* Public storefront
-* Product search and filtering
-* Product ratings
-* SEO-friendly slugs
-* Secure payment integration
-
-## Payment Process
-
-
-
-## Project Structure
-
-The application follows a layered architecture :
-
-- Controllers handle incoming requests.
-- Services contain business logic.
-- Form Requests handle validation.
-- Resources transform API responses.
-- Models interact with the database.
-
-## Database Schema
+### Payment Flow
 
 ```mermaid
-erDiagram
+sequenceDiagram
 
-    VENDORS {
-        bigint id PK
-        string name
-        string email UK
-        string password
-    }
+    participant Client
+    participant API
+    participant Gateway as Payment Gateway
+    participant Webhook
 
-    CLIENTS {
-        bigint id PK
-        string name
-        string email UK
-        string password
-        enum status
-    }
+    Client->>API: Create Checkout
+    API->>API: Create Pending Order
+    API->>Gateway: Create Payment Session
+    Gateway-->>API: Checkout URL
+    API-->>Client: Return Checkout URL
 
-    CATEGORIES {
-        bigint id PK
-        string name
-        string slug UK
-        enum show_in_home
-        bigint parent_id FK
-    }
+    Client->>Gateway: Complete Payment
 
-    PRODUCTS {
-        bigint id PK
-        string name
-        string slug UK
-        decimal price
-        integer quantity
-        text description
-        string image
-        string file
-        enum status
-        bigint category_id FK
-        bigint vendor_id FK
-    }
+    Gateway->>Webhook: Send Payment Status
+    Webhook->>API: Verify Payment
 
-    ORDERS {
-        bigint id PK
-        decimal total
-        decimal subtotal
-        integer product_qty
-        string payment_method
-        enum status
-        bigint product_id FK
-        bigint client_id FK
-    }
-
-    DOWNLOADS {
-        bigint id PK
-        string token UK
-        integer max_downloads
-        integer downloaded_count
-        timestamp expires_at
-        bigint order_id FK
-    }
-
-    REVIEWS {
-        bigint id PK
-        integer rate
-        string comment
-        enum status
-        bigint client_id FK
-        bigint product_id FK
-    }
-
-    VENDORS ||--o{ PRODUCTS : owns
-
-    CATEGORIES ||--o{ CATEGORIES : parent_of
-
-    CATEGORIES ||--o{ PRODUCTS : contains
-
-    CLIENTS ||--o{ ORDERS : places
-
-    PRODUCTS ||--o{ ORDERS : purchased
-
-    ORDERS ||--|| DOWNLOADS : generates
-
-    CLIENTS ||--o{ REVIEWS : writes
-
-    PRODUCTS ||--o{ REVIEWS : receives
+    API->>API: Update Order Status
+    API->>API: Generate Download Token
 ```
 
-## Requirements
+### Step 1: Create Checkout
 
-Before installing, ensure your environment meets these requirements :
+The client initiates a purchase by sending a checkout request.
 
-- PHP ( version 8.x )
-- Laravel ( version 10.x )
-- MySQL database
-- Composer
-- Web server ( Xampp )
+```http
+POST /api/v1/client/checkout
+Authorization: Bearer {jwt-token}
+```
 
-## Installation
+Request Body:
 
-Follow these steps to install and set up `digital-products-store` project :
+```json
+{
+    "product_id": 1,
+    "product_quantity": 2,
+    "payment_method": "cib"
+}
+```
 
-1. **Clone the repository :**
-   ```bash
-   git clone https://github.com/rayanguendouz/digital-products-store.git
-   cd digital-products-store
-   ```
+### Step 2: Create Pending Order
 
-2. **Install dependencies :**
-   ```bash
-   composer install
-   ```
+The API:
 
-3. **Create the environment file :**
+* Validates the request.
+* Checks product availability.
+* Creates an order with a `pending` status.
+* Reserves the requested quantity.
 
-    ```bash
-    cp .env.example .env
-    ```
+### Step 3: Create Payment Session
 
-4. **Configure your database credentials in .env :**
-    ```.env
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=digital-products-store
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
+The selected payment gateway creates a checkout session and returns a secure payment URL.
 
-5. **Configure your payment credentials in .env :**
-    ```.env
-    CHARGILY_MODE=test
-    CHARGILY_PUBLIC_KEY=your_public_key
-    CHARGILY_SECRET_KEY=your_secret_key
-    ```
+Example response:
 
-6. **Generate the application key :**
-    ```bash
-    php artisan key:generate
-    ```
+```json
+{
+    "success": true,
+    "message": "Order created successfully.",
+    "data": {
+        "order": {
+            "id": 14,
+            "status": "pending"
+        },
+        "checkout_url": "https://pay.chargily.dz/..."
+    }
+}
+```
 
-7. **Run database migrations and seeders :**
-   ```bash
-   php artisan migrate --seed
-   ```
+### Step 4: Customer Completes Payment
 
-8. **Create a symbolic link for storage :**
-    ```bash
-    php artisan storage:link
-    ```
+The client application redirects the customer to the returned checkout URL.
 
-## Usage
+Supported payment methods:
 
-Follow these steps to run `digital-products-store` project :
+* CIB
+* Edahabia
 
+### Step 5: Payment Verification
 
-1. **Run the application :**
-   ```bash
-   php artisan serve
-   ```
+After payment completion, the payment gateway sends a webhook request to the application.
 
-2. **Access the API :**
-   - API base URL : [http://localhost:8000/v1/api](http://localhost:8000/v1/api)
+The webhook endpoint:
 
+* Validates the payment event.
+* Verifies the transaction status.
+* Identifies the related order using metadata.
 
-## API testing with Postman
+### Step 6: Order Completion
 
-You can test all available API endpoints using the provided Postman collection.
+If the payment is successful:
 
-### 1. Download the Collection
+* Order status becomes `completed`.
+* Download record is generated.
+* Download token is issued.
 
-[Digital Products Store Postman Collection](collection.json)
+```mermaid
+flowchart TD
 
-### 2. How to Use
+    Pending[Pending Order]
+    Paid[Payment Verified]
+    Completed[Order Completed]
+    Download[Download Token Generated]
 
-1. Open [Postman](https://www.postman.com/downloads/)
-2. Click `Import` and Choose the file you downloaded above.
-3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
-4. Use the available requests grouped under :  
+    Pending --> Paid
+    Paid --> Completed
+    Completed --> Download
+```
 
-   📁 Vendor Routes  
-       ├── 📁 Guest Routes  
-       │    │  
-       ├── 📁 Auth Routes  
-       │    │  
-       │    ├── 📁 Dashboard  
-       │    ├── 📁 Categories  
-       │    ├── 📁 Products  
-       │    ├── 📁 Reviews  
-       │    ├── 📁 Orders  
-       │    ├── 📁 Clients  
-       │    ├── 📁 Profile  
-       │    │  
-   📁 Client Routes  
-       ├── 📁 Guest Routes  
-       │    │  
-       ├── 📁 Auth Routes  
-       │    │  
-       │    ├── 📁 Orders  
-       │    ├── 📁 Downloads  
-       │    ├── 📁 Checkout  
-       │    ├── 📁 Reviews  
-       │    ├── 📁 Profile
-       │    │  
-   📁 Front Routes  
-       ├── 📁 Home  
-       ├── 📁 Shop  
-       └── 📁 Reviews  
+### Order Status Lifecycle
 
-5. Check the full documentation via the following link : https://documenter.getpostman.com/view/YOUR_WORKSPACE_ID/YOUR_DOCUMENT_ID
+| Status    | Description                        |
+| --------- | ---------------------------------- |
+| pending   | Order created and awaiting payment |
+| completed | Payment successfully verified      |
+| failed    | Payment failed                     |
+| canceled  | Order canceled                     |
 
-## Roadmap
+### Download Protection
 
-You can work on the following improvements :
+Digital downloads are protected using secure tokens.
 
-- Wishlist
-- Product favorites
-- Coupons and discounts
-- Vendor subscriptions
-- Product licensing system
-- Advanced analytics
-- Email notifications
-- Multi-language support
+Each download record includes:
 
-## Contributing
+* Unique download token.
+* Maximum download attempts.
+* Expiration date.
+* Order ownership validation.
 
-We welcome contributions! Please follow these guidelines :
+Downloads are available only after successful payment verification.
 
-- Fork the repository and create a new branch for your feature or fix.
-- Write clear commit messages and document your code.
-- Ensure all tests pass before submitting a pull request.
-- Follow the established code style and project structure.
-- Open an issue for discussion before major changes.
+### Security Considerations
 
-## License
+* JWT authentication protects checkout endpoints.
+* Payment verification relies on gateway webhooks.
+* Orders are not marked as paid from client-side redirects.
+* Download access requires a valid token.
+* All payment transactions are verified server-side.
 
-This project is open-sourced under the [MIT License](LICENSE).
-
----
-
-Thank you for using `digital-products-store`! For questions or support, please open an issue on GitHub.
+```
+```
