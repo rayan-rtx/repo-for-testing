@@ -10,7 +10,7 @@ lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
 ## Overview
 
-The `deploy-laravel-app-to-ec2` repository is ... implements a the complete "CI/CD" pipeline for deploying a Laravel application using :
+The `deploy-laravel-app-to-ec2` repository is ... implements a the complete `CI/CD` pipeline for deploying a Laravel application using :
 
 - Apache.
 - Docker ( Docker Compose ).
@@ -27,6 +27,17 @@ The `deploy-laravel-app-to-ec2` repository is ... implements a the complete "CI/
 - Configuration Management.
 
 ## Project Structure
+
+    ├── 📁 .github  
+    ├── 📁 ansible
+    ├── 📁 apache  
+    ├── 📁 app  
+    ├── 📁 docs  
+    ├── 📁 scripts  
+    ├── 📁 terraform  
+    ├── 📄 docker-compose.yml  
+    ├── 📄 Dockerfile  
+    └── 📄 README.md  
 
 ## Requirements
 
@@ -62,37 +73,37 @@ This is what these keys represent :
 
 **1. Push changes or use manual trigger :**
 
-![Alt Text](docs/images/github-actions/manual-trigger-workflow.png)
+![Alt Text](docs/images/github-actions/manual-trigger-workflow.png)<br><br>
 
 **2. Run GitHub Actions jobs sequentially :**
 
 - This all steps executed after run `Build` job :
 
-![Alt Text](docs/images/github-actions/jobs/build-job.png)
+![Alt Text](docs/images/github-actions/jobs/build-job.png)<br><br>
 
 - This all steps executed after run `Test` job :
 
-![Alt Text](docs/images/github-actions/jobs/test-job.png)
+![Alt Text](docs/images/github-actions/jobs/test-job.png)<br><br>
 
 - This all steps executed after run `Deploy` job :
 
-![Alt Text](docs/images/github-actions/jobs/deploy-job.png)
+![Alt Text](docs/images/github-actions/jobs/deploy-job.png)<br><br>
 
 **3. Terraform provisioning :**
 
 - This is the EC2 instance we obtain after running the IAC ( Infrastructure as Code ) :
 
-![Alt Text](docs/images/aws/ec2-terraform-provisioning-1.png)
+![Alt Text](docs/images/aws/ec2-terraform-provisioning-1.png)<br><br>
 
 
-![Alt Text](docs/images/aws/ec2-terraform-provisioning-2.png)
+![Alt Text](docs/images/aws/ec2-terraform-provisioning-2.png)<br><br>
 
 - This is the RDS database we obtain after running the IAC ( Infrastructure as Code ) :
 
-![Alt Text](docs/images/aws/rds-terraform-provisioning-1.png)
+![Alt Text](docs/images/aws/rds-terraform-provisioning-1.png)<br><br>
 
 
-![Alt Text](docs/images/aws/rds-terraform-provisioning-2.png)
+![Alt Text](docs/images/aws/rds-terraform-provisioning-2.png)<br><br>
 
 **4. EC2 Access Configuration :**
 
@@ -120,14 +131,32 @@ This is what these keys represent :
 
 - You can now access the EC2 instance via the web using public ip address ( in our case `13.60.43.122` ) :
 
-![Alt Text](docs/images/web-page.png)
+![Alt Text](docs/images/web-page.png)<br><br>
 
 - On the other hand, you can now access the PHPMyAdmin panel via the web using public ip address with port ( in our case `13.60.43.122:8080` ), and login using the credentials we previously knew ( `DB_USERNAME` and `DB_PASSWORD` ) :
 
 ![Alt Text](docs/images/pma-1.png)<br><br><br>
 ![Alt Text](docs/images/pma-2.png)<br><br><br>
-![Alt Text](docs/images/pma-3.png)<br><br><br>
+![Alt Text](docs/images/pma-3.png)<br><br>
 
 **⚠️ Important Note:**
 
 It is not recommended to provide any method for access the PHPMyAdmin panel in the production environment ( we did this for illustrative purposes only ).
+
+## Contributing
+
+We welcome contributions! Please follow these guidelines :
+
+- Fork the repository and create a new branch for your feature or fix.
+- Write clear commit messages and document your code.
+- Ensure all tests pass before submitting a pull request.
+- Follow the established code style and project structure.
+- Open an issue for discussion before major changes.
+
+## License
+
+This project is open-sourced under the [MIT License](LICENSE).
+
+---
+
+Thank you for using `deploy-laravel-app-to-ec2`! For questions or support, please open an issue on GitHub.
