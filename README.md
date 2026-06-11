@@ -1,408 +1,148 @@
-# CMS Roles & Permissions
+# Deploy Laravel App to EC2
 
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql)
-![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?logo=laravel)
-![License](https://img.shields.io/badge/License-MIT-green)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
+![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-A RESTful API for content management systems ( CMS ).
+lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
-## Introduction
+## Overview
 
-The `cms-roles-permissions` repository is REST API that provides authentication, authorization, and role-based access control for content management systems ( CMS ).
+The `deploy-laravel-app-to-ec2` repository is ... implements a the complete `CI/CD` pipeline for deploying a Laravel application using :
 
-The project implements a complete user management system using Laravel Policies and the Spatie Permission package, allowing administrators to manage users, roles, permissions, posts, categories, tags, comments, and notes through a modular architecture, secure, and extensible API.
+- Apache.
+- Docker ( Docker Compose ).
+- Terraform.
+- Ansible.
+- GitHub Actions.
+- AWS ( EC2 + RDS + S3 + DynamoDB ).
 
-## Features
+## What this project demonstrates
 
-- Modular architecture for easy customization and scalability.
-- User authentication and role-based access control.
-- RESTful API for seamless integration with frontend frameworks.
-- Media management for images and files.
-- Dashboard with analytics widgets and content overview.
-- SEO-friendly URLs and metadata management.
+- Automated CI/CD pipelines.
+- Dockerized Laravel app.
+- Infrastructure as code.
+- Configuration Management.
 
 ## Project Structure
 
-The application follows a layered architecture :
-
-- Controllers handle incoming requests.
-- Services contain business logic.
-- Policies manage authorization.
-- Form Requests handle validation.
-- Resources transform API responses.
-- Models interact with the database.
-
-## Database Schema
-
-```mermaid
-erDiagram
-
-    USERS ||--o{ CATEGORIES : creates
-    USERS ||--o{ TAGS : creates
-    USERS ||--o{ POSTS : creates
-    USERS ||--o{ NOTES : creates
-
-    CATEGORIES ||--o{ POSTS : contains
-
-    POSTS ||--o{ COMMENTS : has
-    POSTS }o--o{ TAGS : tagged_with
-
-    COMMENTS ||--o{ COMMENTS : replies_to
-
-    USERS }o--o{ ROLES : assigned_roles
-    ROLES }o--o{ PERMISSIONS : grants
-```
-
-## Authorization Flow
-
-The application implements a hybrid authorization model using :
-
-* Spatie Laravel Permission for permissions
-* Laravel Policies for ownership and hierarchy validation
-
-### Role Hierarchy
-
-The system defines a hierarchy between roles :
-
-```text
-Admin (Level 3)
-       ↑
-Editor (Level 2)
-       ↑
-Author (Level 1)
-```
-
-This hierarchy is used when deleting resources.
-A higher role can delete resources created by lower roles.
-A lower role can never delete resources owned by higher roles.
-
-### Permission-Based Authorization
-
-#### Category Permissions
-
-| Permission      |
-| --------------- |
-| create_category |
-| update_category |
-| delete_category |
-
-#### Tag Permissions
-
-| Permission |
-| ---------- |
-| create_tag |
-| update_tag |
-| delete_tag |
-
-#### Post Permissions
-
-| Permission  |
-| ----------- |
-| create_post |
-| update_post |
-| delete_post |
-
-#### Comment Permissions
-
-| Permission     |
-| -------------- |
-| create_comment |
-| update_comment |
-| delete_comment |
-
-#### Role Permissions
-
-| Permission  |
-| ----------- |
-| view_roles  |
-| create_role |
-| update_role |
-| delete_role |
-
-### Ownership Rules
-
-For updates, users may only modify resources they created.
-
-#### Categories
-
-```text
-Can Update Category ?
-        ↓
-Has update_category permission ?
-        ↓
-Category owner ?
-        ↓
-Yes → Access Granted
-No  → Access Denied
-```
-
-#### Tags
-
-```text
-Can Update Tag ?
-        ↓
-Has update_tag permission ?
-        ↓
-Tag owner ?
-        ↓
-Yes → Access Granted
-No  → Access Denied
-```
-
-#### Posts
-
-```text
-Can Update Post ?
-        ↓
-Has update_post permission ?
-        ↓
-Post owner ?
-        ↓
-Yes → Access Granted
-No  → Access Denied
-```
-
-#### Comments
-
-```text
-Can Update Comment ?
-        ↓
-Has update_comment permission ?
-        ↓
-Owns the related post ?
-        ↓
-Yes → Access Granted
-No  → Access Denied
-```
-
-### Deletion Rules
-
-Deletion follows ownership and hierarchy validation.
-
-#### Same Owner
-
-Users can delete resources they own.
-
-```text
-Resource Owner
-    ↓
-Delete Own Resource
-    ↓
-Allowed
-```
-
-#### Higher Role
-
-Users can delete resources owned by lower roles.
-
-Example :
-
-```text
-Admin deletes Editor post
-    ↓
-Allowed
-```
-
-```text
-Admin deletes Author post
-    ↓
-Allowed
-```
-
-```text
-Editor deletes Author post
-    ↓
-Allowed
-```
-
-#### Equal Role
-
-Users cannot delete resources owned by another user with the same role.
-
-Example :
-
-```text
-Admin A deletes Admin B post
-    ↓
-Denied
-```
-
-```text
-Editor A deletes Editor B post
-    ↓
-Denied
-```
-
-```text
-Author A deletes Author B post
-    ↓
-Denied
-```
-
-### Lower Role
-
-Users cannot delete resources owned by higher roles.
-
-Example :
-
-```text
-Author deletes Editor post
-    ↓
-Denied
-```
-
-```text
-Author deletes Admin post
-    ↓
-Denied
-```
-
-```text
-Editor deletes Admin post
-    ↓
-Denied
-```
-
-### Special User Rules
-
-The primary administrator account is protected.
-User ID 1 cannot be updated or deleted :
-
-```php
-if ($targetUser->id == 1) {
-    return false;
-}
-```
-
-This prevents accidental modification or deletion of the system administrator.
-
-### Special Role Rules
-
-Roles assigned to users cannot be deleted :
-
-```php
-if ($role->users->count()) {
-    return false;
-}
-```
-
-A role must first be detached from all users before it can be removed.
-
-### Authorization Matrix
-
-| Resource   | Create     | Update                   | Delete                         |
-| ---------- | ---------- | ------------------------ | ------------------------------ |
-| Categories | Permission | Owner Only               | Owner or Higher Role           |
-| Tags       | Permission | Owner Only               | Owner or Higher Role           |
-| Posts      | Permission | Owner Only               | Owner or Higher Role           |
-| Comments   | Permission | Post Owner Only          | Post Owner or Higher Role      |
-| Users      | Permission | Permission + Not User #1 | Permission + Not User #1       |
-| Roles      | Permission | Permission               | Permission + No Assigned Users |
-
-This design combines Role-Based Access Control, resource ownership, and role hierarchy enforcement to provide fine-grained authorization throughout the application.
+    /project
+      ├── 📁 .github  
+      ├── 📁 ansible
+      ├── 📁 apache  
+      ├── 📁 app  
+      ├── 📁 docs  
+      ├── 📁 scripts  
+      ├── 📁 terraform  
+      ├── 📄 docker-compose.yml  
+      ├── 📄 Dockerfile  
+      └── 📄 README.md  
 
 ## Requirements
 
-Before installing, ensure your environment meets these requirements :
+**⩩ AWS account ( tab the [link](https://signin.aws.amazon.com/signup?request_type=register) and follow the steps ) :**<br><br>
 
-- PHP ( version 8.x )
-- Laravel ( version 10.x )
-- MySQL database
-- Composer
-- Web server ( Xampp )
+![Alt Text](docs/images/aws/create-aws-account.png)<br><br>
 
-## Installation
+**⩩ Key Pair ( from AWS panel ) :**<br><br>
 
-Follow these steps to install and set up `cms-roles-permissions` project :
+![Alt Text](docs/images/aws/key-pair.png)<br><br>
 
-1. **Clone the repository :**
-   ```bash
-   git clone https://github.com/rayanguendouz/cms-roles-permissions.git
-   cd cms-roles-permissions
-   ```
+**⩩ S3 bucket for terraform backend ( from AWS panel ) :**<br><br>
 
-2. **Install dependencies :**
-   ```bash
-   composer install
-   ```
+![Alt Text](docs/images/aws/s3-bucket.png)<br><br>
 
-3. **Create the environment file :**
+**⩩ DynamoDB table for terraform locking ( from AWS panel ) :**<br><br>
 
-    ```bash
-    cp .env.example .env
-    ```
+![Alt Text](docs/images/aws/dynamodb-table.png)<br><br>
 
-4. **Configure your database credentials in .env :**
-    ```.env
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=cms-roles-permissions
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
+**⩩ GitHub secrets keys ( tab the [link](https://github.com/<your-username>/<your-repo>/settings/secrets/actions) and follow the steps ) :**<br><br>
 
-5. **Generate the application key :**
-    ```bash
-    php artisan key:generate
-    ```
+![Alt Text](docs/images/github-actions/repository-secret-variables.png)<br><br>
 
-6. **Run database migrations and seeders :**
-   ```bash
-   php artisan migrate --seed
-   ```
+This is what these keys represent :
 
-7. **Create a symbolic link for storage :**
-    ```bash
-    php artisan storage:link
-    ```
+- `EC2_SSH_KEY` : Private SSH key used by Ansible to connect to the EC2 instance.
+- `AWS_ACCESS_KEY` : AWS Access Key ID used to authenticate Terraform.
+- `AWS_SECRET_KEY` : AWS Secret Access Key paired with the Access Key ID.
+- `DB_USERNAME` : Master username for the RDS MySQL database. Terraform uses it when creating the RDS instance.
+- `DB_PASSWORD` : Master password for the RDS MySQL database. Terraform uses it when creating the RDS instance.
 
-## Usage
+## Deployment flow explained
 
-Follow these steps to run `cms-roles-permissions` project :
+**1. Push changes or use manual trigger :**
+
+![Alt Text](docs/images/github-actions/manual-trigger-workflow.png)<br><br>
+
+**2. Run GitHub Actions jobs sequentially :**
+
+- This all steps executed after run `Build` job :
+
+![Alt Text](docs/images/github-actions/jobs/build-job.png)<br><br>
+
+- This all steps executed after run `Test` job :
+
+![Alt Text](docs/images/github-actions/jobs/test-job.png)<br><br>
+
+- This all steps executed after run `Deploy` job :
+
+![Alt Text](docs/images/github-actions/jobs/deploy-job.png)<br><br>
+
+**3. Terraform provisioning :**
+
+- This is the EC2 instance we obtain after running the IAC ( Infrastructure as Code ) :
+
+![Alt Text](docs/images/aws/ec2-terraform-provisioning-1.png)<br><br>
 
 
-1. **Run the application :**
-   ```bash
-   php artisan serve
-   ```
+![Alt Text](docs/images/aws/ec2-terraform-provisioning-2.png)<br><br>
 
-2. **Access the API :**
-   - API base URL : [http://localhost:8000/v1/api](http://localhost:8000/v1/api)
+- This is the RDS database we obtain after running the IAC ( Infrastructure as Code ) :
+
+![Alt Text](docs/images/aws/rds-terraform-provisioning-1.png)<br><br>
 
 
-## API testing with Postman
+![Alt Text](docs/images/aws/rds-terraform-provisioning-2.png)<br><br>
 
-You can test all available API endpoints using the provided Postman collection.
+**4. EC2 Access Configuration :**
 
-### 1. Download the Collection
+- Create the SSH configuration directory.
+- Retrieve the EC2 private key from GitHub Secrets.
+- Add the EC2 host fingerprint to known hosts.
+- Generate a dynamic Ansible inventory file.
 
-[CMS Roles Permissions Postman Collection](collection.json)
+**5. Ansible management :**
 
-### 2. How to Use
+- Install Ansible on the GitHub Actions runner.
+- Passe database configuration variables to Ansible.
+- Execute the deployment playbook on the target EC2 instance.
 
-1. Open [Postman](https://www.postman.com/downloads/)
-2. Click `Import` and Choose the file you downloaded above.
-3. Set the `url` environment variable to your API base URL (e.g `http://127.0.0.1:8000/api/v1`)
-4. Use the available requests grouped under :  
-   📁 Guest Routes  
-       │  
-   📁 Auth Routes  
-       ├── 📁 Dashboard  
-       ├── 📁 Categories  
-       ├── 📁 Tags  
-       ├── 📁 Roles  
-       ├── 📁 Users  
-       ├── 📁 Comments  
-       ├── 📁 Notes  
-       │  
-   📁 Front Routes  
-       ├── 📁 Home  
-       ├── 📁 Blog  
-       └── 📁 Comments  
+**6. Dockerized application :**
 
-5. Check the full documentation via the following link : https://documenter.getpostman.com/view/YOUR_WORKSPACE_ID/YOUR_DOCUMENT_ID
+- Install Docker Engine.
+- Add the `ubuntu` user to the Docker group.
+- Enable and start the Docker service.
+- Build Docker images using Docker Compose.
+- Start application containers in detached mode.
+- Passe database connection variables to containers.
+
+**7. Application access :**
+
+- You can now access the EC2 instance via the web using public ip address ( in our case `13.60.43.122` ) :
+
+![Alt Text](docs/images/web-page.png)<br><br>
+
+- On the other hand, you can now access the PHPMyAdmin panel via the web using public ip address with port ( in our case `13.60.43.122:8080` ), and login using the credentials we previously knew ( `DB_USERNAME` and `DB_PASSWORD` ) :
+
+![Alt Text](docs/images/pma-1.png)<br><br><br>
+![Alt Text](docs/images/pma-2.png)<br><br><br>
+![Alt Text](docs/images/pma-3.png)<br><br>
+
+**⚠️ Important Note:**
+
+It is not recommended to provide any method for access the PHPMyAdmin panel in the production environment ( we did this for illustrative purposes only ).
 
 ## Contributing
 
@@ -420,4 +160,4 @@ This project is open-sourced under the [MIT License](LICENSE).
 
 ---
 
-Thank you for using `cms-roles-permissions`! For questions or support, please open an issue on GitHub.
+Thank you for using `deploy-laravel-app-to-ec2`! For questions or support, please open an issue on GitHub.
