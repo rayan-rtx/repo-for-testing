@@ -124,18 +124,9 @@ This is what these keys represent :
 
 - On the other hand, you can now access the PHPMyAdmin panel via the web using public ip address with port ( in our case `13.60.43.122:8080` ), and login using the credentials we previously knew ( `DB_USERNAME` and `DB_PASSWORD` ) :
 
-![Alt Text](docs/images/pma-1.png)
-<br>
-<br>
-![Alt Text](docs/images/pma-2.png)
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-![Alt Text](docs/images/pma-3.png)
+![Alt Text](docs/images/pma-1.png)<br><br><br>
+![Alt Text](docs/images/pma-2.png)<br><br><br>
+![Alt Text](docs/images/pma-3.png)<br><br><br>
 
 **⚠️ Important Note:**
 
