@@ -30,25 +30,25 @@ The `deploy-laravel-app-to-ec2` repository is ... implements a the complete "CI/
 
 ## Requirements
 
-- AWS account ( tab the [link](https://signin.aws.amazon.com/signup?request_type=register) and follow the steps )
+**⩩ AWS account ( tab the [link](https://signin.aws.amazon.com/signup?request_type=register) and follow the steps ) :**<br><br>
 
-![Alt Text](docs/images/aws/create-aws-account.png)
+![Alt Text](docs/images/aws/create-aws-account.png)<br><br>
 
-- Key Pair ( from AWS panel )
+**⩩ Key Pair ( from AWS panel ) :**<br><br>
 
-![Alt Text](docs/images/aws/key-pair.png)
+![Alt Text](docs/images/aws/key-pair.png)<br><br>
 
-**⩩ S3 bucket for terraform backend ( from AWS panel )**<br><br>
+**⩩ S3 bucket for terraform backend ( from AWS panel ) :**<br><br>
 
-![Alt Text](docs/images/aws/s3-bucket.png)
+![Alt Text](docs/images/aws/s3-bucket.png)<br><br>
 
-- DynamoDB table for terraform locking ( from AWS panel )
+**⩩ DynamoDB table for terraform locking ( from AWS panel ) :**<br><br>
 
-![Alt Text](docs/images/aws/dynamodb-table.png)
+![Alt Text](docs/images/aws/dynamodb-table.png)<br><br>
 
-- GitHub secrets keys ( tab the [link](https://github.com/<your-username>/<your-repo>/settings/secrets/actions) and follow the steps ) :
+**⩩ GitHub secrets keys ( tab the [link](https://github.com/<your-username>/<your-repo>/settings/secrets/actions) and follow the steps ) :**<br><br>
 
-![Alt Text](docs/images/github-actions/repository-secret-variables.png)
+![Alt Text](docs/images/github-actions/repository-secret-variables.png)<br><br>
 
 This is what these keys represent :
 
