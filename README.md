@@ -38,7 +38,7 @@ The `deploy-laravel-app-to-ec2` repository is ... implements a the complete "CI/
 
 ![Alt Text](docs/images/aws/key-pair.png)
 
-**⩩ S3 bucket for terraform backend ( from AWS panel )**<br><br><br>
+**⩩ S3 bucket for terraform backend ( from AWS panel )**<br><br>
 
 ![Alt Text](docs/images/aws/s3-bucket.png)
 
