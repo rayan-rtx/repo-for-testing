@@ -7,6 +7,8 @@
 
 lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
+![success](https://img.shields.io/badge/status-success-brightgreen)
+
 ## Overview
 
 The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a `Laravel` application inside `Docker` using :
