@@ -9,8 +9,6 @@ lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
 ## Overview
 
-<span style="color: green;">This is green text</span>
-<span style="color: red;">This is red text</span>
 The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a `Laravel` application inside `Docker` using :
 
 - Apache.
@@ -23,7 +21,7 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 
 ## Workflow explained
 
-- Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
+⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
 
    ```text
    ubuntu@ip-172-31-34-198:~$ sudo apt update
@@ -31,7 +29,7 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
    ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
    ```
 
-- We check that Docker is installed :
+⩩ We check that Docker is installed :
 
    ```text
    ubuntu@ip-172-31-34-198:~$ sudo docker version
@@ -76,8 +74,16 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
    ubuntu@ip-172-31-34-198:~$ exit
    ```
 
+## Docker Compose plugin
+
 
 **⚠️ Important Note:**
+
+## Concepts you should know
+
+## Container sharing
+
+## CI / CD section
 
 ## Contributing
 
