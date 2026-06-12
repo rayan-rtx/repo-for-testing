@@ -29,8 +29,7 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 
 ⩩ We check that Docker is installed :
 
-   ```text
-   ubuntu@ip-172-31-34-198:~$ sudo docker version
+   ![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/ubuntu@ip--172--31--34--198:-14a800) ~$ sudo docker version
    Client:
    Version:           27.5.1
    API version:       1.47
@@ -58,7 +57,6 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
    docker-init:
    Version:          0.19.0
    GitCommit:
-   ```
 
 - We apply this command to gain permissions to use Docker without `sudo` :
 
