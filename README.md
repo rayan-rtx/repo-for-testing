@@ -1,144 +1,91 @@
-# Deploy Laravel App to EC2
+# Dockerized Laravel App
 
-![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Apache](https://img.shields.io/badge/apache-%23D42029.svg?style=for-the-badge&logo=apache&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
-![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
 ## Overview
 
-The `deploy-laravel-app-to-ec2` repository is ... implements a the complete `CI/CD` pipeline for deploying a Laravel application using :
+The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a `Laravel` application inside `Docker` using :
 
 - Apache.
-- Docker ( Docker Compose ).
-- Terraform.
-- Ansible.
-- GitHub Actions.
-- AWS ( EC2 + RDS + S3 + DynamoDB ).
+- Docker.
+- Docker Compose.
 
 ## Project demonstrates
 
-- Automated CI/CD pipelines.
-- Dockerized Laravel app.
-- Infrastructure as code.
-- Configuration Management.
-
-## Project Structure
-
-    /project
-      ├── 📁 .github  
-      ├── 📁 ansible
-      ├── 📁 apache  
-      ├── 📁 app  
-      ├── 📁 docs  
-      ├── 📁 scripts  
-      ├── 📁 terraform  
-      ├── 📄 docker-compose.yml  
-      ├── 📄 Dockerfile  
-      └── 📄 README.md  
-
 ## Requirements
 
-**⩩ AWS account ( tab the [link](https://signin.aws.amazon.com/signup?request_type=register) and follow the steps ) :**<br><br>
+## Workflow explained
 
-![Alt Text](docs/images/aws/create-aws-account.png)<br><br>
+⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
 
-**⩩ Key Pair ( from AWS panel ) :**<br><br>
+```
+ubuntu@ip-172-31-34-198:~$ sudo apt update
+ubuntu@ip-172-31-34-198:~$ sudo apt upgrade -y
+ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
+```
 
-![Alt Text](docs/images/aws/key-pair.png)<br><br>
+⩩ We check that Docker is installed :
 
-**⩩ S3 bucket for terraform backend ( from AWS panel ) :**<br><br>
+   ```text
+   ubuntu@ip-172-31-34-198:~$ sudo docker version
+   Client:
+   Version:           27.5.1
+   API version:       1.47
+   Go version:        go1.22.2
+   Git commit:        27.5.1-0ubuntu3~24.04.2
+   Built:             Mon Jun  2 11:51:53 2025
+   OS/Arch:           linux/amd64
+   Context:           default
 
-![Alt Text](docs/images/aws/s3-bucket.png)<br><br>
+   Server:
+   Engine:
+   Version:          27.5.1
+   API version:      1.47 (minimum version 1.24)
+   Go version:       go1.22.2
+   Git commit:       27.5.1-0ubuntu3~24.04.2
+   Built:            Mon Jun  2 11:51:53 2025
+   OS/Arch:          linux/amd64
+   Experimental:     false
+   containerd:
+   Version:          1.7.27
+   GitCommit:
+   runc:
+   Version:          1.2.5-0ubuntu1~24.04.1
+   GitCommit:
+   docker-init:
+   Version:          0.19.0
+   GitCommit:
+   ```
 
-**⩩ DynamoDB table for terraform locking ( from AWS panel ) :**<br><br>
+- We apply this command to gain permissions to use Docker without `sudo` :
 
-![Alt Text](docs/images/aws/dynamodb-table.png)<br><br>
+   ```text
+   ubuntu@ip-172-31-34-198:~$ sudo usermod -aG docker $USER
+   ```
 
-**⩩ GitHub secrets keys ( tab the [link](https://github.com/<your-username>/<your-repo>/settings/secrets/actions) and follow the steps ) :**<br><br>
+- Next, we exit the virtual machine to apply the changes :
 
-![Alt Text](docs/images/github-actions/repository-secret-variables.png)<br><br>
+   ```text
+   ubuntu@ip-172-31-34-198:~$ exit
+   ```
 
-This is what these keys represent :
+## Docker commands
 
-- `EC2_SSH_KEY` : Private SSH key used by Ansible to connect to the EC2 instance.
-- `AWS_ACCESS_KEY` : AWS Access Key ID used to authenticate Terraform.
-- `AWS_SECRET_KEY` : AWS Secret Access Key paired with the Access Key ID.
-- `DB_USERNAME` : Master username for the RDS MySQL database. Terraform uses it when creating the RDS instance.
-- `DB_PASSWORD` : Master password for the RDS MySQL database. Terraform uses it when creating the RDS instance.
+## Docker Compose plugin
 
-## Deployment flow explained
-
-**1. Push changes or use manual trigger :**
-
-![Alt Text](docs/images/github-actions/manual-trigger-workflow.png)<br><br>
-
-**2. Run GitHub Actions jobs sequentially :**
-
-- This all steps executed after run `Build` job :
-
-![Alt Text](docs/images/github-actions/jobs/build-job.png)<br><br>
-
-- This all steps executed after run `Test` job :
-
-![Alt Text](docs/images/github-actions/jobs/test-job.png)<br><br>
-
-- This all steps executed after run `Deploy` job :
-
-![Alt Text](docs/images/github-actions/jobs/deploy-job.png)<br><br>
-
-**3. Terraform provisioning :**
-
-- This is the EC2 instance we obtain after running the IAC ( Infrastructure as Code ) :
-
-![Alt Text](docs/images/aws/ec2-terraform-provisioning-1.png)<br><br>
-![Alt Text](docs/images/aws/ec2-terraform-provisioning-2.png)<br><br>
-
-- This is the RDS database we obtain after running the IAC ( Infrastructure as Code ) :
-
-![Alt Text](docs/images/aws/rds-terraform-provisioning-1.png)<br><br>
-![Alt Text](docs/images/aws/rds-terraform-provisioning-2.png)<br><br>
-
-**4. EC2 Access Configuration :**
-
-- Create the SSH configuration directory.
-- Retrieve the EC2 private key from GitHub Secrets.
-- Add the EC2 host fingerprint to known hosts.
-- Generate a dynamic Ansible inventory file.
-
-**5. Ansible management :**
-
-- Install Ansible on the GitHub Actions runner.
-- Passe database configuration variables to Ansible.
-- Execute the deployment playbook on the target EC2 instance.
-
-**6. Dockerized application :**
-
-- Install Docker Engine.
-- Add the `ubuntu` user to the Docker group.
-- Enable and start the Docker service.
-- Build Docker images using Docker Compose.
-- Start application containers in detached mode.
-- Passe database connection variables to containers.
-
-**7. Application access :**
-
-- You can now access the EC2 instance via the web using public ip address ( in our case `13.60.43.122` ) :
-
-![Alt Text](docs/images/web-page.png)<br><br>
-
-- On the other hand, you can now access the PHPMyAdmin panel via the web using public ip address with port ( in our case `13.60.43.122:8080` ), and login using the credentials we previously knew ( `DB_USERNAME` and `DB_PASSWORD` ) :
-
-![Alt Text](docs/images/pma-1.png)<br><br><br>
-![Alt Text](docs/images/pma-2.png)<br><br><br>
-![Alt Text](docs/images/pma-3.png)<br><br>
 
 **⚠️ Important Note:**
 
-It is not recommended to provide any method for access the PHPMyAdmin panel in the production environment ( we did this for illustrative purposes only ).
+## Concepts you should know
+
+## Container sharing
+
+## CI / CD section
 
 ## Contributing
 
@@ -156,4 +103,4 @@ This project is open-sourced under the [MIT License](LICENSE).
 
 ---
 
-Thank you for using `deploy-laravel-app-to-ec2`! For questions or support, please open an issue on GitHub.
+Thank you for using `dockerized-laravel-app`! For questions or support, please open an issue on GitHub.
