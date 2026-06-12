@@ -31,36 +31,41 @@ sudo apt install -y docker.io
 
 ⩩ We check that Docker is installed :
 
-   ```text
-   ubuntu@ip-172-31-34-198:~$ sudo docker version
-   Client:
-   Version:           27.5.1
-   API version:       1.47
-   Go version:        go1.22.2
-   Git commit:        27.5.1-0ubuntu3~24.04.2
-   Built:             Mon Jun  2 11:51:53 2025
-   OS/Arch:           linux/amd64
-   Context:           default
+```
+sudo docker version
+```
 
-   Server:
-   Engine:
-   Version:          27.5.1
-   API version:      1.47 (minimum version 1.24)
-   Go version:       go1.22.2
-   Git commit:       27.5.1-0ubuntu3~24.04.2
-   Built:            Mon Jun  2 11:51:53 2025
-   OS/Arch:          linux/amd64
-   Experimental:     false
-   containerd:
-   Version:          1.7.27
-   GitCommit:
-   runc:
-   Version:          1.2.5-0ubuntu1~24.04.1
-   GitCommit:
-   docker-init:
-   Version:          0.19.0
-   GitCommit:
-   ```
+this result example :
+
+```
+Client:
+Version:           27.5.1
+API version:       1.47
+Go version:        go1.22.2
+Git commit:        27.5.1-0ubuntu3~24.04.2
+Built:             Mon Jun  2 11:51:53 2025
+OS/Arch:           linux/amd64
+Context:           default
+
+Server:
+Engine:
+Version:          27.5.1
+API version:      1.47 (minimum version 1.24)
+Go version:       go1.22.2
+Git commit:       27.5.1-0ubuntu3~24.04.2
+Built:            Mon Jun  2 11:51:53 2025
+OS/Arch:          linux/amd64
+Experimental:     false
+containerd:
+Version:          1.7.27
+GitCommit:
+runc:
+Version:          1.2.5-0ubuntu1~24.04.1
+GitCommit:
+docker-init:
+Version:          0.19.0
+GitCommit:
+```
 
 - We apply this command to gain permissions to use Docker without `sudo` :
 
