@@ -36,8 +36,7 @@ sudo docker version
 ```
 
 - this output if Docker installed successfully :
-
-- ```text
+```text
 Client:
 Version:           27.5.1
 API version:       1.47
