@@ -15,7 +15,7 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 - Docker.
 - Docker Compose.
 
-## What this project demonstrates
+## Project demonstrates
 
 ## Requirements
 
@@ -23,13 +23,16 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 
 ⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
 
-![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/ubuntu@ip--172--31--34--198:-70f55e) ~$ sudo apt update  
-![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/ubuntu@ip--172--31--34--198:-14a800) ~$ sudo apt upgrade -y  
-![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/ubuntu@ip--172--31--34--198:-14a800) ~$ sudo apt install -y docker.io 
+   ```bash
+   ubuntu@ip-172-31-34-198:~$ sudo apt update
+   ubuntu@ip-172-31-34-198:~$ sudo apt upgrade -y
+   ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
+   ```
 
 ⩩ We check that Docker is installed :
 
-   ![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/ubuntu@ip--172--31--34--198:-14a800) ~$ sudo docker version
+   ```text
+   ubuntu@ip-172-31-34-198:~$ sudo docker version
    Client:
    Version:           27.5.1
    API version:       1.47
@@ -57,6 +60,7 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
    docker-init:
    Version:          0.19.0
    GitCommit:
+   ```
 
 - We apply this command to gain permissions to use Docker without `sudo` :
 
@@ -69,6 +73,8 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
    ```text
    ubuntu@ip-172-31-34-198:~$ exit
    ```
+
+## Docker commands
 
 ## Docker Compose plugin
 
