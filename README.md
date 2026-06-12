@@ -86,7 +86,7 @@ GitCommit:
 
 **⚠️ Important Note:**
 
-> [!WARNING]
+> [!Noteee]
 > Urgent info that needs immediate user attention to avoid problems.
 
 ## Concepts you should know
