@@ -20,8 +20,13 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 ## Requirements
 
 ## Workflow explained
+```
+git status
+git add
+git commit
+```
 
-⩩ ***Docker*** can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running <code>Ubuntu</code> ) :
+⩩ ***Docker*** can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running _Ubuntu_ ) :
 
 ```bash
 sudo apt update
