@@ -9,6 +9,8 @@ lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
 ## Overview
 
+<span style="color: green;">This is green text</span>
+<span style="color: red;">This is red text</span>
 The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a `Laravel` application inside `Docker` using :
 
 - Apache.
