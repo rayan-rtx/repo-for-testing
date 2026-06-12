@@ -7,8 +7,6 @@
 
 lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
-![success](https://img.shields.io/badge/status-success-brightgreen)
-
 ## Overview
 
 The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a `Laravel` application inside `Docker` using :
@@ -25,11 +23,11 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 
 ⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
 
-   ```text
+
    ![ubuntu@ip-172-31-34-198:](https://img.shields.io/badge/just%20the%20message-#14a800)~$ sudo apt update
    ubuntu@ip-172-31-34-198:~$ sudo apt upgrade -y
    ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
-   ```
+
 
 ⩩ We check that Docker is installed :
 
