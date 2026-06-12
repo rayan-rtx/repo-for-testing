@@ -24,9 +24,9 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 ⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
 
 ```
-ubuntu@ip-172-31-34-198:~$ sudo apt update
-ubuntu@ip-172-31-34-198:~$ sudo apt upgrade -y
-ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y docker.io
 ```
 
 ⩩ We check that Docker is installed :
