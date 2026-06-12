@@ -1,7 +1,7 @@
 # Dockerized Laravel App
 
 ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![PHPMyAdmin](https://img.shields.io/badge/phpMyAdmin-6C78AF.svg?style=for-the-badge&logo=phpMyAdmin&logoColor=white)
 ![Apache](https://img.shields.io/badge/apache-%23D42029.svg?style=for-the-badge&logo=apache&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
@@ -22,10 +22,8 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 ## Workflow explained
 
 ⩩ Docker can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running `Ubuntu` ) :
-`#0969DA`
 
 ```
-`#0969DA`
 ubuntu@ip-172-31-34-198:~$ sudo apt update
 ubuntu@ip-172-31-34-198:~$ sudo apt upgrade -y
 ubuntu@ip-172-31-34-198:~$ sudo apt install -y docker.io
