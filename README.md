@@ -20,11 +20,6 @@ The `dockerzied-laravel-app` repository is ... implements a the complete steps f
 ## Requirements
 
 ## Workflow explained
-```
-git status
-git add
-git commit
-```
 
 ⩩ ***Docker*** can be installed locally on your machine or on a virtual machine ( in our case, we are using a virtual machine running _Ubuntu_ ) :
 
@@ -40,7 +35,7 @@ sudo apt install -y docker.io
 sudo docker version
 ```
 
-this result example :
+this output example if Docker installed successfully :
 
 ```text
 Client:
@@ -74,15 +69,15 @@ GitCommit:
 
 - We apply this command to gain permissions to use Docker without `sudo` :
 
-   ```text
-   ubuntu@ip-172-31-34-198:~$ sudo usermod -aG docker $USER
-   ```
+```bash
+sudo usermod -aG docker $USER
+```
 
 - Next, we exit the virtual machine to apply the changes :
 
-   ```text
-   ubuntu@ip-172-31-34-198:~$ exit
-   ```
+```bash
+exit
+```
 
 ## Docker commands
 
