@@ -9,7 +9,7 @@ lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
 ## Overview
 
-**9. Check that the file "products_xxxxxxxx_xxxxxx.xlsx" exists in "outputs/" located in <bucket> S3 bucket :**
+**9. Check that the file "products_xxxxxxxx_xxxxxx.xlsx" exists in "outputs/" located in &lt;bucket&gt; S3 bucket :**
 
 The `dockerzied-laravel-app` repository is ... implements a the complete steps for running a _Laravel_ application inside _Docker_ using :
 
