@@ -7,6 +7,13 @@
 
 lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
+| Parameter Group            | Description                                                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **EC2 Configuration**      | Configure the EC2 instance, including its name, instance type, key pair, and root EBS volume settings.                  |
+| **Database Configuration** | Configure the Amazon RDS instance, including the database name, administrator credentials, storage, and instance class. |
+| **Network Configuration**  | Configure the VPC, subnets, and SSH access settings used by the deployed infrastructure.                                |
+
+
 ## Overview
 
 **9. Check that the file `products_xxxxxxxx_xxxxxx.xlsx` exists in "outputs/" located in &lt;bucket&gt; S3 bucket :**
