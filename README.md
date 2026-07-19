@@ -12,91 +12,14 @@ lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 ```mermaid
 erDiagram
 
-    VENDORS {
-        bigint id PK
-        string name
-        string email UK
-        string password
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CLIENTS {
-        bigint id PK
-        string name
-        string email UK
-        string password
-        enum status
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CATEGORIES {
-        bigint id PK
-        string name
-        string slug UK
-        enum show_in_home
-        bigint parent_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PRODUCTS {
-        bigint id PK
-        string name
-        string slug UK
-        decimal price
-        integer quantity
-        text description
-        string image
-        string file
-        enum status
-        bigint category_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    ORDERS {
-        bigint id PK
-        decimal total
-        decimal subtotal
-        integer product_quantity
-        string payment_method
-        enum status
-        string payment_reference
-        bigint product_id FK
-        bigint client_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    DOWNLOADS {
-        bigint id PK
-        string token UK
-        integer max_downloads
-        integer downloaded_count
-        timestamp expires_at
-        bigint order_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    REVIEWS {
-        bigint id PK
-        integer rate
-        string comment
-        enum status
-        bigint client_id FK
-        bigint product_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CATEGORIES ||--o{ CATEGORIES : "parent"
+    CATEGORIES ||--o{ CATEGORIES : parent_of
     CATEGORIES ||--o{ PRODUCTS : contains
-    PRODUCTS ||--o{ ORDERS : ordered
+
     CLIENTS ||--o{ ORDERS : places
+    PRODUCTS ||--o{ ORDERS : ordered
+
     ORDERS ||--|| DOWNLOADS : generates
+
     CLIENTS ||--o{ REVIEWS : writes
     PRODUCTS ||--o{ REVIEWS : receives
 ```
