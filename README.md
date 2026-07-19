@@ -7,6 +7,8 @@
 
 lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem.
 
+## Database Schema
+
 ```mermaid
 erDiagram
 
@@ -61,6 +63,7 @@ erDiagram
         integer product_quantity
         string payment_method
         enum status
+        string payment_reference
         bigint product_id FK
         bigint client_id FK
         timestamp created_at
@@ -89,20 +92,12 @@ erDiagram
         timestamp updated_at
     }
 
-    %% Relationships
-
+    CATEGORIES ||--o{ CATEGORIES : "parent"
     CATEGORIES ||--o{ PRODUCTS : contains
-
-    CATEGORIES ||--o{ CATEGORIES : parent_of
-
+    PRODUCTS ||--o{ ORDERS : ordered
     CLIENTS ||--o{ ORDERS : places
-
-    PRODUCTS ||--o{ ORDERS : purchased_in
-
     ORDERS ||--|| DOWNLOADS : generates
-
     CLIENTS ||--o{ REVIEWS : writes
-
     PRODUCTS ||--o{ REVIEWS : receives
 ```
 
