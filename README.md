@@ -29,7 +29,7 @@
 | Update Type | Terraform Symbol | Examples                |
 |-------------|------------------|-------------------------|
 |             |                  | Update Subnet CIDR      |
-| `replace`   |  `-/+`           | Update EC2 Instance AMI |
+| replace     |  `-/+`           | Update EC2 Instance AMI |
 |             |                  | Update DB Subnet Group  |
 
 | Update Type | Terraform Symbol | Examples                |
