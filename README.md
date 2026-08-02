@@ -15,5 +15,13 @@
 #### Possible solutions
 
 - Wait a few minutes and run the deployment workflow again.
-- Change the EC2 instance type (for example, `t3.micro` to `t3.small`).
+
+
+
+| Type            | symbol | examples |
+|-----------------|--------|----------|
+| update-in-place | ~      |          |
+| | -/+    |          |
+| | +      |          |
+| | -      |          |- Change the EC2 instance type (for example, `t3.micro` to `t3.small`).
 - Deploy the infrastructure in a different Availability Zone (for example, `eu-north-1a` to `eu-north-1b`).
