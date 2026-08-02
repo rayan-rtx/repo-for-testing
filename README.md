@@ -48,7 +48,7 @@
 
 | Update Type  | Description | Examples |
 |--------------|-------------|----------|
-| Update In-Place | Existing resources are modified without replacement. Resource identifiers remain the same and downtime is usually minimal. | Update resource tags<br>change EC2 instance type<br>change RDS instance class<br>increase RDS allocated storage<br>modify security group rules |
-| Replace | Terraform destroys the existing resource and creates a new one. This may change IP addresses<br>DNS names<br>or resource IDs and may cause temporary downtime. | Change EC2 AMI<br>modify subnet CIDR blocks<br>change DB subnet group<br>recreate VPC components |
-| Create | New resources are added without affecting existing resources. | Create a subnet<br>create a route table<br>create an Internet Gateway<br>create a NAT Gateway<br>create additional security groups |
-| Destroy | Resources removed from the Terraform configuration are deleted from AWS. | Remove a subnet<br>delete a route table<br>remove an Internet Gateway<br>delete unused security groups |
+| Update In-Place | Existing resources are modified without replacement. Resource identifiers remain the same and downtime is usually minimal. | Update resource tags<br>- Change EC2 instance type<br>- Change RDS instance class<br>- Increase RDS allocated storage<br> |
+| Replace | Terraform destroys the existing resource and creates a new one. This may change IP addresses, DNS names, or resource IDs and may cause temporary downtime. | Change EC2 AMI<br>- Modify Subnet CIDR<br>- Change DB Subnet Group |
+| Create | New resources are added without affecting existing resources. | Create a Subnet<br>- Create a Route Table<br>- Create an Internet Gateway<br>- Create a NAT Gateway |
+| Destroy | Resources removed from the Terraform configuration are deleted from AWS. | Remove a Subnet<br>- Remove a Route Table<br>- Remove an Internet Gateway |
