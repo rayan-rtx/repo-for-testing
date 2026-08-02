@@ -18,10 +18,10 @@
 - Change the EC2 instance type (for example, `t3.micro` to `t3.small`).
 - Deploy the infrastructure in a different Availability Zone (for example, `eu-north-1a` to `eu-north-1b`).
 
-| Type            | symbol | examples                              |
-|-----------------|--------|---------------------------------------|
-| update-in-place | ~      | Update [name] Tags                    |
-|                 |        | Update EC2 Instance Type              |
-|                 |        | Update RDS DB Identifier              |
-|                 |        | Update RDS Instance Type              |
-|                 |        | Update RDS Instance Allocated Storage |
+| Update Type       | Terraform Symbol | Examples                              |
+|-------------------|------------------|---------------------------------------|
+|                   |                  | Update [name] Tags                    |
+|                   |                  | Update EC2 Instance Type              |
+| `update-in-place` |  `~`             | Update RDS DB Identifier              |
+|                   |                  | Update RDS Instance Type              |
+|                   |                  | Update RDS Instance Allocated Storage |
