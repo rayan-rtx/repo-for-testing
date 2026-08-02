@@ -25,3 +25,21 @@
 | `update-in-place` |  `~`             | Update RDS DB Identifier              |
 |                   |                  | Update RDS Instance Type              |
 |                   |                  | Update RDS Instance Allocated Storage |
+
+| Update Type | Terraform Symbol | Examples                |
+|-------------|------------------|-------------------------|
+|             |                  | Update Subnet CIDR      |
+| `replace`   |  `-/+`           | Update EC2 Instance AMI |
+|             |                  | Update DB Subnet Group  |
+
+| Update Type | Terraform Symbol | Examples                |
+|-------------|------------------|-------------------------|
+|             |                  | Create Public Subnet    |
+| `create`    |  `+`             | Create Internet Gateway |
+|             |                  | Create Route Table      |
+
+| Update Type | Terraform Symbol | Examples                |
+|-------------|------------------|-------------------------|
+|             |                  | Remove Public Subnet    |
+| `destroy`   |  `-`             | Remove Internet Gateway |
+|             |                  | Remove Route Table      |
