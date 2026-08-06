@@ -52,3 +52,10 @@
 | Replace | Terraform destroys the existing resource and creates a new one. This may change IP addresses, DNS names, or resource IDs and may cause temporary downtime. | - Change EC2 AMI<br>- Modify Subnet CIDR<br>- Change DB Subnet Group |
 | Create | New resources are added without affecting existing resources. | - Create a Subnet<br>- Create a Route Table<br>- Create an Internet Gateway |
 | Destroy | Resources removed from the Terraform configuration are deleted from AWS. | - Remove a Subnet<br>- Remove a Route Table<br>- Remove an Internet Gateway |
+
+
+
+
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![CloudFormation](https://img.shields.io/badge/AWS-CloudFormation-orange?style=for-the-badge&logo=amazonaws)
+![YAML](https://img.shields.io/badge/YAML-Template-red?style=for-the-badge&logo=yaml)
