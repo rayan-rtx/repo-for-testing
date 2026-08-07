@@ -59,3 +59,29 @@
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![CloudFormation](https://img.shields.io/badge/AWS-CloudFormation-orange?style=for-the-badge&logo=amazonaws)
 ![YAML](https://img.shields.io/badge/YAML-Template-red?style=for-the-badge&logo=yaml)
+
+
+
+## Troubleshooting
+
+The following table lists common issues that may occur while deploying, testing, or running the Excel processing workflow.
+
+| Issue | Possible Cause | Solution |
+|-------|----------------|----------|
+| **Lambda function fails with `ModuleNotFoundError`** | The required `pandas` or `openpyxl` dependency is missing or the corresponding Lambda Layer is not attached. | Verify that both the **pandas** and **openpyxl** layers are attached to the `ProcessProductsExcel` function. |
+| **Lambda function fails to import a dependency** | The Lambda Layer was built for an incompatible Python runtime or architecture. | Verify that the layer is compatible with the Lambda function's Python runtime and architecture. |
+| **Lambda function returns `AccessDenied` when accessing S3** | The Lambda execution role does not have sufficient permissions to read from or write to the S3 bucket. | Review the Lambda execution role and grant the required S3 permissions. |
+| **Test event fails with `NoSuchKey` or file not found** | The specified object key does not match an existing file in the S3 bucket. | Verify that the bucket name and object key are correct. For example, `inputs/products.xlsx` must exactly match the file path in S3. |
+| **Lambda function is not triggered after uploading a file** | The S3 trigger is missing, disabled, or incorrectly configured. | Verify that the S3 trigger is attached to the correct Lambda function and that it listens for **ObjectCreated** events. |
+| **Lambda function is triggered but does not process the uploaded file** | The uploaded file is outside the configured `inputs/` path or does not match the expected file format. | Upload the Excel file to the configured `inputs/` folder and verify that it is a valid `.xlsx` file. |
+| **Lambda function times out** | The Excel file requires more processing time than the configured Lambda timeout. | Increase the Lambda execution timeout and consider increasing the allocated memory if processing larger files. |
+| **Output file is not generated** | The function failed during validation, Excel processing, or the S3 upload operation. | Review the Lambda execution logs in **Amazon CloudWatch Logs** to identify the failure. |
+| **Output file contains fewer records than expected** | Some rows failed the configured validation rules or duplicate records were removed. | Review the input data and verify the validation rules for required fields, price, stock, and category. |
+| **Duplicate records are missing from the output** | Duplicate removal is part of the processing logic. | Verify that the removed rows contain identical product information and review the source data if necessary. |
+| **Lambda test invocation fails** | The test event contains an incorrect bucket name, object key, or event structure. | Compare the test event with `tests/event.json` and update the values to match your S3 environment. |
+| **Lambda function cannot retrieve the Excel file** | The S3 object does not exist or the object key is incorrect. | Confirm that the Excel file exists in the S3 bucket and that the object key matches its exact path. |
+| **Excel file cannot be processed** | The uploaded file is invalid, corrupted, or not a supported `.xlsx` workbook. | Open the file locally to verify that it is valid, then upload a supported Excel file. |
+| **CloudWatch Logs contain no execution logs** | The function has not been invoked, or the execution role cannot write logs to CloudWatch. | Verify that the Lambda function was invoked and that its execution role has the required CloudWatch Logs permissions. |
+| **Lambda deployment does not publish the latest code** | The code changes were saved but not deployed. | After modifying the function code, select **Deploy** in the Lambda console and wait for the deployment to complete. |
+| **S3 trigger configuration reports a permission error** | Lambda does not have the required permission to be invoked by Amazon S3. | Review the Lambda resource-based policy and S3 trigger configuration, then recreate or update the trigger if necessary. |
+| **Processing fails for large Excel files** | The function may require additional memory, execution time, or temporary storage. | Increase the Lambda memory and timeout settings as needed and review the CloudWatch execution logs for resource-related errors. |
