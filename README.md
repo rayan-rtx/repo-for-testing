@@ -6,8 +6,8 @@ Can update resource ?
         │
    ┌────┴────┐
   Yes        No
-   │          │
-   ▼          ▼
+   │         │
+   ▼         ▼
 Allowed     Denied
 to next
 step
@@ -19,8 +19,8 @@ Has update_resource permission ?
         │
    ┌────┴────┐
   Yes        No
-   │          │
-   ▼          ▼
+   │         │
+   ▼         ▼
 Allowed     Denied
 to next
 step
@@ -30,8 +30,8 @@ You are the owner of the resource ?
         │
    ┌────┴────┐
   Yes        No
-   │          │
-   ▼          ▼
+   │         │
+   ▼         ▼
 Allowed     Denied
 ```
 
