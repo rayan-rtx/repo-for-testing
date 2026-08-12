@@ -1,3 +1,14 @@
+| Field              | Description                                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `amount`           | The total amount to be charged for the order. This value is calculated by the application and sent to the payment gateway in Algerian Dinar (DZD).                                                |
+| `currency`         | The currency used for the transaction. The application currently supports **DZD (Algerian Dinar)**, which is required by the Chargily payment gateway.                                            |
+| `payment_method`   | Specifies the payment method selected by the customer. Supported values are **CIB** (Interbank Card) and **Edahabia** (Algeria Post card).                                                        |
+| `success_url`      | The URL where the customer is redirected after a successful payment. This endpoint typically displays a confirmation page and may trigger additional post-payment actions.                        |
+| `failure_url`      | The URL where the customer is redirected if the payment is cancelled, declined, or fails for any reason. It allows the customer to retry the payment or return to the checkout page.              |
+| `webhook_endpoint` | The endpoint that receives asynchronous payment notifications from Chargily. It is used to verify the payment result and update the order status independently of the customer's browser session. |
+| `metadata`         | Additional custom data sent with the payment request. The application includes the local `order_id` so webhook events can be matched to the correct order when processing payment notifications.  |
+
+
 ```text
 # Step 1
 
