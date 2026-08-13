@@ -1,7 +1,7 @@
-![Upload Stack Content](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVOz4e29queZhKG-ZvdDVEUq55u6os4pUQu2QvFB0x0Q&s=10)
+![Upload Stack Content](docs/images/github-actions/jobs/build-job.png)
 _<p align="center">Upload Stack Content</p>_
 
-![Push Commit Changes](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVOz4e29queZhKG-ZvdDVEUq55u6os4pUQu2QvFB0x0Q&s=10)
+![Push Commit Changes](docs/images/github-actions/jobs/build-job.png)
 _<p align="center">Push Commit Changes</p>_
 
 
