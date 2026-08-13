@@ -1,5 +1,5 @@
 ![Upload Stack Content](docs/images/github-actions/jobs/push-commit-changes.png)
-_<p align="center">Upload Stack Content</p>_<br><br>
+_<p align="center">Upload Stack Content</p><br><br>_
 
 ![Push Commit Changes](docs/images/github-actions/jobs/push-commit-changes.png)
 _<p align="center">Push Commit Changes</p>_
