@@ -1,7 +1,7 @@
-![Upload Stack Content](docs/images/github-actions/jobs/build-job.png)
+![Upload Stack Content](docs/images/github-actions/jobs/push-commit-changes.png)
 _<p align="center">Upload Stack Content</p>_
 
-![Push Commit Changes](docs/images/github-actions/jobs/build-job.png)
+![Push Commit Changes](docs/images/github-actions/jobs/push-commit-changes.png)
 _<p align="center">Push Commit Changes</p>_
 
 
