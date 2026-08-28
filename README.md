@@ -14,3 +14,24 @@
 |--------|-------------|
 | `DocumentRoot /var/www/html/public` | Sets Laravel `public` directory as the web server document root, ensuring that only publicly accessible files are served to clients. |
 | `<Directory /var/www/html/public> ... </Directory>` | Defines access permissions for the `public` directory, enables the use of `.htaccess` files through `AllowOverride All`, and allows all users to access the application with `Require all granted`. |
+
+
+#### Services Part
+
+| Service      | Description |
+|--------------|-------------|
+| `app`        | Builds the Laravel application image from the local `Dockerfile`, creates the `laravel-app-container` container, exposes port **80**, and connects it to the internal Docker network. |
+| `mysql`      | Pulls the official MySQL 8.0 image from Docker Hub, creates the `laravel-mysql-container` container, initializes the database, and exposes port **3306**. |
+| `phpmyadmin` | Pulls the official PHPMyAdmin image from Docker Hub, creates the `laravel-pma-container` container, connects it to the MySQL service, and exposes port **8080**. |
+
+#### Network Part
+
+| Network           | Description |
+|-------------------|-------------|
+| `laravel-network` | Creates a custom bridge network that allows the services to communicate using their service names (such as `mysql`) instead of IP addresses. |
+
+#### Volume Part
+
+| Volume       | Description |
+|--------------|-------------|
+| `mysql-data` | Creates a named Docker volume that persists MySQL database data outside the container, allowing the data to survive container removal or recreation. |
