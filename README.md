@@ -9,3 +9,8 @@
 | `COPY app /var/www/html` | Copies the Laravel application source code into the image. |
 | `COPY ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf` | Replace Apache default virtual host configuration with a custom configuration that serves the Laravel application from the `public` directory. |
 | `COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer` | Copies the Composer executable from the official Composer image into the container, allowing Composer commands to be executed without installing Composer manually. |
+
+| Apache | Description |
+|--------|-------------|
+| `DocumentRoot /var/www/html/public` | Sets Laravel `public` directory as the web server document root, ensuring that only publicly accessible files are served to clients. |
+| `<Directory /var/www/html/public> ... </Directory>` | Defines access permissions for the `public` directory, enables the use of `.htaccess` files through `AllowOverride All`, and allows all users to access the application with `Require all granted`. |
