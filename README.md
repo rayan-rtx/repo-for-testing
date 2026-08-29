@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+>
+> Do not commit production credentials, passwords, API keys, or other sensitive values contained in .env to a public repository. Use .env.example as a template when appropriate.
+
+
+
 | Instruction           | Description |
 |-----------------------|-------------|
 | `FROM php:8.2-apache` | Uses the official Docker image that comes with **PHP 8.2** and the **Apache** web server pre-installed as the base image for the application. |
